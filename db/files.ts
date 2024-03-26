@@ -127,6 +127,7 @@ export const createFile = async (
   })
 
   const formData = new FormData()
+  formData.append("file", file)
   formData.append("file_id", createdFile.id)
   formData.append("embeddingsProvider", embeddingsProvider)
 
