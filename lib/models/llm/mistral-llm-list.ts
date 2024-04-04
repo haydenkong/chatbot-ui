@@ -16,10 +16,10 @@ const MISTRAL_7B: LLM = {
 
 // Mixtral (UPDATED 12/21/23)
 const MIXTRAL: LLM = {
-  modelId: "mistral-small",
+  modelId: "mistral-small-latest",
   modelName: "Mistral Small",
   provider: "mistral",
-  hostedId: "mistral-small",
+  hostedId: "mistral-small-latest",
   platformLink: MISTRAL_PLATORM_LINK,
   imageInput: false,
   pricing: {
@@ -32,10 +32,10 @@ const MIXTRAL: LLM = {
 
 // Mistral Medium (UPDATED 12/21/23)
 const MISTRAL_MEDIUM: LLM = {
-  modelId: "mistral-medium",
+  modelId: "mistral-medium-latest",
   modelName: "Mistral Medium",
   provider: "mistral",
-  hostedId: "mistral-medium",
+  hostedId: "mistral-medium-latest",
   platformLink: MISTRAL_PLATORM_LINK,
   imageInput: false,
   pricing: {
@@ -48,10 +48,10 @@ const MISTRAL_MEDIUM: LLM = {
 
 // Mistral Large (UPDATED 03/05/24)
 const MISTRAL_LARGE: LLM = {
-  modelId: "mistral-large-2402",
+  modelId: "mistral-large-latest",
   modelName: "Mistral Large",
   provider: "mistral",
-  hostedId: "mistral-large-2402",
+  hostedId: "mistral-large-latest",
   platformLink: MISTRAL_PLATORM_LINK,
   imageInput: false,
   pricing: {
