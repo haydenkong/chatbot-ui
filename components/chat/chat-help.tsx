@@ -35,11 +35,20 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
           <div className="flex space-x-2">
             <Link
               className="cursor-pointer hover:opacity-50"
-              href="https://twitter.com/PixelVerseIT"
+              href="https://twitter.com/ChatbotUI"
               target="_blank"
               rel="noopener noreferrer"
             >
               <IconBrandX />
+            </Link>
+
+            <Link
+              className="cursor-pointer hover:opacity-50"
+              href="https://github.com/mckaywrigley/chatbot-ui"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <IconBrandGithub />
             </Link>
           </div>
 
@@ -62,13 +71,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Show Help</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               /
             </div>
           </div>
@@ -77,13 +86,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Show Workspaces</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ;
             </div>
           </div>
@@ -92,13 +101,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex w-[300px] justify-between">
           <div>New Chat</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               O
             </div>
           </div>
@@ -107,13 +116,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Focus Chat</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               L
             </div>
           </div>
@@ -122,13 +131,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Toggle Files</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               F
             </div>
           </div>
@@ -137,13 +146,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Toggle Retrieval</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               E
             </div>
           </div>
@@ -152,13 +161,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Open Settings</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               I
             </div>
           </div>
@@ -167,13 +176,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Open Quick Settings</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               P
             </div>
           </div>
@@ -182,13 +191,13 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
         <DropdownMenuItem className="flex justify-between">
           <div>Toggle Sidebar</div>
           <div className="flex opacity-60">
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               ⌘
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               Shift
             </div>
-            <div className="min-w-[30px] rounded border-DEFAULT p-1 text-center">
+            <div className="min-w-[30px] rounded border-[1px] p-1 text-center">
               S
             </div>
           </div>
