@@ -17,17 +17,18 @@ export async function POST(request: Request) {
     checkApiKey(profile.google_gemini_api_key, "Google")
 
     const genAI = new GoogleGenerativeAI(profile.google_gemini_api_key || "")
-    // const googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
+    let googleModel;
 
     if (chatSettings.model === "gemini-1.5-pro-latest") {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" }, {
+      googleModel = genAI.getGenerativeModel({ model: chatSettings.model }, {
         apiVersion: 'v1beta',
-        })        
+      })
     } else {
-      const googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
+      googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
     }
 
-    if (chatSettings.model === "gemini-pro" || "gemini-1.5-pro-latest") {
+
+    if (chatSettings.model === "gemini-pro" || chatSettings.model === "gemini-1.5-pro-latest") {
       const lastMessage = messages.pop()
 
       const chat = googleModel.startChat({
