@@ -17,19 +17,9 @@ export async function POST(request: Request) {
     checkApiKey(profile.google_gemini_api_key, "Google")
 
     const genAI = new GoogleGenerativeAI(profile.google_gemini_api_key || "")
-    let googleModel;
+    const googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
 
-    if (chatSettings.model === "gemini-1.5-pro-latest") {
-      googleModel = genAI.getGenerativeModel({ 
-        model: chatSettings.model, 
-        apiVersion: 'v1beta'
-      })
-    } else {
-      googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
-    }
-
-
-    if (chatSettings.model === "gemini-pro" || chatSettings.model === "gemini-1.5-pro-latest") {
+    if (chatSettings.model === "gemini-pro") {
       const lastMessage = messages.pop()
 
       const chat = googleModel.startChat({
