@@ -20,8 +20,9 @@ export async function POST(request: Request) {
     let googleModel;
 
     if (chatSettings.model === "gemini-1.5-pro-latest") {
-      googleModel = genAI.getGenerativeModel({ model: chatSettings.model }, {
-        apiVersion: 'v1beta',
+      googleModel = genAI.getGenerativeModel({ 
+        model: chatSettings.model, 
+        apiVersion: 'v1beta'
       })
     } else {
       googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
