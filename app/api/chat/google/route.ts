@@ -17,9 +17,38 @@ export async function POST(request: Request) {
     checkApiKey(profile.google_gemini_api_key, "Google")
 
     const genAI = new GoogleGenerativeAI(profile.google_gemini_api_key || "")
-    const googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
 
-    if (chatSettings.model === "gemini-pro" || "gemini-1.5-pro-latest") {
+    if (chatSettings.model === "gemini-1.5-pro-latest") {
+      const googleModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" }, {
+        apiVersion: 'v1beta',
+      });
+      const lastMessage = messages.pop()
+
+      const chat = googleModel.startChat({
+        history: messages,
+        generationConfig: {
+          temperature: chatSettings.temperature
+        }
+      })
+
+      const response = await chat.sendMessageStream(lastMessage.parts)
+
+      const encoder = new TextEncoder()
+      const readableStream = new ReadableStream({
+        async start(controller) {
+          for await (const chunk of response.stream) {
+            const chunkText = chunk.text()
+            controller.enqueue(encoder.encode(chunkText))
+          }
+          controller.close()
+        }
+      })
+
+      return new Response(readableStream, {
+        headers: { "Content-Type": "text/plain" }
+      })
+    } else if (chatSettings.model === "gemini-pro") {
+      const googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
       const lastMessage = messages.pop()
 
       const chat = googleModel.startChat({
@@ -46,6 +75,7 @@ export async function POST(request: Request) {
         headers: { "Content-Type": "text/plain" }
       })
     } else if (chatSettings.model === "gemini-pro-vision") {
+      const googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
       // FIX: Hacky until chat messages are supported
       const HACKY_MESSAGE = messages[messages.length - 1]
 
