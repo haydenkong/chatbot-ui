@@ -11,6 +11,15 @@ const LLaMA2_70B: LLM = {
   imageInput: false
 }
 
+const LLaMA3_70B: LLM = {
+  modelId: "llama3-70b-8192",
+  modelName: "LLaMA3-70b-chat",
+  provider: "groq",
+  hostedId: "llama3-70b-4096",
+  platformLink: GROQ_PLATORM_LINK,
+  imageInput: false,
+}
+
 const MIXTRAL_8X7B: LLM = {
   modelId: "mixtral-8x7b-32768",
   modelName: "Mixtral-8x7b-Instruct-v0.1",
