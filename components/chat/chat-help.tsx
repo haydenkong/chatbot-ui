@@ -35,7 +35,7 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
           <div className="flex space-x-2">
             <Link
               className="cursor-pointer hover:opacity-50"
-              href="https://twitter.com/PixelVerseAI"
+              href="https://twitter.com/PixelVerseAI_"
               target="_blank"
               rel="noopener noreferrer"
             >
