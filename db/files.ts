@@ -139,7 +139,9 @@ export const createFile = async (
   if (!response.ok) {
     const jsonText = await response.text()
     const json = JSON.parse(jsonText)
-    console.error(`Error processing file:${createdFile.id}, status:${response.status}, response:${json.message}`)
+    console.error(
+      `Error processing file:${createdFile.id}, status:${response.status}, response:${json.message}`
+    )
     toast.error("Failed to process file. Reason:" + json.message, {
       duration: 10000
     })
@@ -201,7 +203,9 @@ export const createDocXFile = async (
   if (!response.ok) {
     const jsonText = await response.text()
     const json = JSON.parse(jsonText)
-    console.error(`Error processing file:${createdFile.id}, status:${response.status}, response:${json.message}`)
+    console.error(
+      `Error processing file:${createdFile.id}, status:${response.status}, response:${json.message}`
+    )
     toast.error("Failed to process file. Reason:" + json.message, {
       duration: 10000
     })
