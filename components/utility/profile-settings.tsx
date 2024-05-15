@@ -335,9 +335,9 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
           </SheetHeader>
 
           <Tabs defaultValue="profile">
-            <TabsList className="mt-4 grid w-full grid-cols-3">
+            <TabsList className="mt-4 grid w-full grid-cols-2">
               <TabsTrigger value="profile">Profile</TabsTrigger>
-              <TabsTrigger value="keys">API Keys</TabsTrigger>
+              {/* <TabsTrigger value="keys">API Keys</TabsTrigger> */}
               <TabsTrigger value="account">Account</TabsTrigger>
             </TabsList>
 
@@ -434,7 +434,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
               </div>
             </TabsContent>
 
-            <TabsContent className="mt-4 space-y-4" value="keys">
+            {/* <TabsContent className="mt-4 space-y-4" value="keys"> */}
               {/* <div className="mt-5 space-y-2">
                 <Label className="flex items-center">
                   {useAzureOpenai
@@ -630,7 +630,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                 )}
               </div> */}
 
-              <div className="space-y-1">
+              {/* <div className="space-y-1">
                 {envKeyMap["openai"] ? (
                   <Label>You currently have access to OpenAI Models</Label>
                 ) : (
@@ -741,7 +741,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   </>
                 )}
               </div>
-            </TabsContent>
+            </TabsContent> */}
 
 
             <TabsContent className="mt-4 space-y-4" value="account">
@@ -750,8 +750,8 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   <div className="flex items-center space-x-2">
                     <Label>Your current plan is: PixelVerseAI <span className="bg-blue-500 text-white rounded-full px-2 py-1">Plus/Max</span></Label>
                   </div>
-                  <Label className="text-sm text-gray-400">Note: Plus & Max members share the same dashboard, however, Max users get unlimited usage.</Label>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/5kA8xz3rpb3rgh2aEE', '_blank')}>Configure subscription</button>
+                  <Label className="text-sm text-gray-400">Note: Plus & Max members share the same dashboard, however, Max users get unlimited usage & more models.</Label>
+                  <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/5kA8xz3rpb3rgh2aEE', '_blank')}>Manage Subscription</button>
                 </div>
               </div>
             </TabsContent>
