@@ -27,7 +27,7 @@ const GEMINI_PRO: LLM = {
 // Gemini Pro Vision (UPDATED 12/22/23)
 const GEMINI_15_FLASH: LLM = {
   modelId: "gemini-1.5-flash-latest",
-  modelName: "Gemini Pro Vision",
+  modelName: "Gemini 1.5 Flash",
   provider: "google",
   hostedId: "gemini-1.5-flash-latest",
   platformLink: GOOGLE_PLATORM_LINK,
