@@ -37,7 +37,7 @@ const CLAUDE_3_HAIKU: LLM = {
 
 // Claude 3 Sonnet (UPDATED 03/04/24)
 const CLAUDE_3_SONNET: LLM = {
-  modelId: "claude-3-sonnet-20240229",
+  modelId: "claude-3-haiku-20240307",
   modelName: "Claude 3 Sonnet",
   provider: "anthropic",
   hostedId: "claude-3-haiku-20240307",
@@ -47,7 +47,7 @@ const CLAUDE_3_SONNET: LLM = {
 
 // Claude 3 Opus (UPDATED 03/04/24)
 const CLAUDE_3_OPUS: LLM = {
-  modelId: "claude-3-opus-20240229",
+  modelId: "claude-3-haiku-20240307",
   modelName: "Claude 3 Opus",
   provider: "anthropic",
   hostedId: "claude-3-haiku-20240307",
