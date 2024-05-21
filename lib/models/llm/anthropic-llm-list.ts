@@ -25,19 +25,20 @@ const CLAUDE_INSTANT: LLM = {
   imageInput: false
 }
 
-// Claude 3 Haiku (UPDATED 03/13/24)
-const CLAUDE_3_HAIKU: LLM = {
-  modelId: "claude-3-haiku-20240307",
+
+// Claude 3 Opus (UPDATED 03/04/24)
+const CLAUDE_3_OPUS: LLM = {
+  modelId: "claude-3-opus-20240229",
   modelName: "Claude 3 Haiku",
   provider: "anthropic",
-  hostedId: "claude-3-haiku-20240307",
+  hostedId: "claude-3-opus-20240229",
   platformLink: ANTHROPIC_PLATFORM_LINK,
   imageInput: true
 }
 
 // Claude 3 Sonnet (UPDATED 03/04/24)
 const CLAUDE_3_SONNET: LLM = {
-  modelId: "claude-3-haiku-20240307",
+  modelId: "claude-3-sonnet-20240229",
   modelName: "Claude 3 Sonnet",
   provider: "anthropic",
   hostedId: "claude-3-sonnet-20240229",
@@ -45,12 +46,18 @@ const CLAUDE_3_SONNET: LLM = {
   imageInput: true
 }
 
-// Claude 3 Opus (UPDATED 03/04/24)
-const CLAUDE_3_OPUS: LLM = {
+
+
+
+
+
+
+// Claude 3 Haiku (UPDATED 03/13/24)
+const CLAUDE_3_HAIKU: LLM = {
   modelId: "claude-3-haiku-20240307",
   modelName: "Claude 3 Opus",
   provider: "anthropic",
-  hostedId: "claude-3-opus-20240229",
+  hostedId: "claude-3-haiku-20240307",
   platformLink: ANTHROPIC_PLATFORM_LINK,
   imageInput: true
 }
