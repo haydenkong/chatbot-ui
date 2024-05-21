@@ -31,7 +31,7 @@ const CLAUDE_3_OPUS: LLM = {
   modelId: "claude-3-opus-20240229",
   modelName: "Claude 3 Haiku",
   provider: "anthropic",
-  hostedId: "claude-3-opus-20240229",
+  hostedId: "claude-3-haiku-20240229",
   platformLink: ANTHROPIC_PLATFORM_LINK,
   imageInput: true
 }
