@@ -75,7 +75,8 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
   )
 
 
-  const [subscription, setSubscription] = useState<string | null>(null);
+  // const [subscription, setSubscription] = useState<string | null>(null);
+  const [subscription] = useState(profile?.subscription || "")
 
 
 
