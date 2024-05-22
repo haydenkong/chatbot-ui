@@ -6,6 +6,7 @@ import {
   PROFILE_USERNAME_MIN
 } from "@/db/limits"
 import { updateProfile } from "@/db/profile"
+import { getSubscriptionByUserId } from "@/db/profile"
 import { uploadProfileImage } from "@/db/storage/profile-images"
 import { exportLocalStorageAsJSON } from "@/lib/export-old-data"
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models"
@@ -72,6 +73,29 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
   const [profileInstructions, setProfileInstructions] = useState(
     profile?.profile_context || ""
   )
+
+
+  const [subscription, setSubscription] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      if (profile?.user_id) {
+        try {
+          const subscriptionData = await getSubscriptionByUserId(profile.user_id);
+          setSubscription(subscriptionData.subscription); 
+        } catch (error) {
+          console.error("Error fetching subscription:", error);
+          // Handle error, maybe set a default subscription status
+          setSubscription('Unknown'); 
+        }
+      }
+    };
+
+    fetchSubscription();
+  }, [profile?.user_id]); 
+
+
+
 
   const [useAzureOpenai, setUseAzureOpenai] = useState(
     profile?.use_azure_openai
@@ -748,7 +772,13 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
               <div className="space-y-4">
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
-                    <Label>Your current plan is: PixelVerseAI <span className="bg-blue-500 text-white rounded-full px-2 py-1">Plus/Max</span></Label>
+                    <Label>Your current plan is: PixelVerseAI
+                      {subscription && (
+                        <span className="bg-blue-500 text-white rounded-full px-2 py-1">
+                          {subscription}
+                        </span>
+                      )}
+                    </Label>
                   </div>
                   <Label className="text-sm text-gray-400">Note: Plus & Max members share the same dashboard, however, Max users get unlimited usage & more models.</Label>
                   <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/5kA8xz3rpb3rgh2aEE', '_blank')}>Manage Subscription</button>

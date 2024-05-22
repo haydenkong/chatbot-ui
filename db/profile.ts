@@ -69,3 +69,17 @@ export const deleteProfile = async (profileId: string) => {
 
   return true
 }
+
+export const getSubscriptionByUserId = async (userId: string) => {
+  const { data: subscription, error } = await supabase
+    .from("profiles")
+    .select("subscription")
+    .eq("user_id", userId)
+    .single()
+
+  if (!subscription) {
+    throw new Error(error.message)
+  }
+
+  return subscription
+}
