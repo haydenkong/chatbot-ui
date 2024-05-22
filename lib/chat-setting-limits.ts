@@ -47,17 +47,23 @@ export const CHAT_SETTING_LIMITS: Record<LLMID, ChatSettingLimits> = {
     MAX_TOKEN_OUTPUT_LENGTH: 2048,
     MAX_CONTEXT_LENGTH: 30720
   },
-  // "gemini-1.5-pro-latest": {
-  //   MIN_TEMPERATURE: 0.0,
-  //   MAX_TEMPERATURE: 1.0,
-  //   MAX_TOKEN_OUTPUT_LENGTH: 1000000,
-  //   MAX_CONTEXT_LENGTH: 1000000
-  // },
   "gemini-pro-vision": {
     MIN_TEMPERATURE: 0.0,
     MAX_TEMPERATURE: 1.0,
     MAX_TOKEN_OUTPUT_LENGTH: 4096,
     MAX_CONTEXT_LENGTH: 12288
+  },
+  "gemini-1.5-pro-latest": {
+    MIN_TEMPERATURE: 0.0,
+    MAX_TEMPERATURE: 1.0,
+    MAX_TOKEN_OUTPUT_LENGTH: 4096,
+    MAX_CONTEXT_LENGTH: 1000000
+  },
+  "gemini-1.5-flash-latest": {
+    MIN_TEMPERATURE: 0.0,
+    MAX_TEMPERATURE: 1.0,
+    MAX_TOKEN_OUTPUT_LENGTH: 4096,
+    MAX_CONTEXT_LENGTH: 1000000
   },
 
   // MISTRAL MODELS
