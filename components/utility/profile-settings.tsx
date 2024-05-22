@@ -77,23 +77,6 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
 
   const [subscription, setSubscription] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchSubscription = async () => {
-      if (profile?.user_id) {
-        try {
-          const subscriptionData = await getSubscriptionByUserId(profile.user_id);
-          setSubscription(subscriptionData.subscription); 
-        } catch (error) {
-          console.error("Error fetching subscription:", error);
-          // Handle error, maybe set a default subscription status
-          setSubscription('Unknown'); 
-        }
-      }
-    };
-
-    fetchSubscription();
-  }, [profile?.user_id]); 
-
 
 
 
