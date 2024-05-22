@@ -28,7 +28,7 @@ const CLAUDE_INSTANT: LLM = {
 
 // Claude 3 Opus (UPDATED 03/04/24)
 const CLAUDE_3_OPUS: LLM = {
-  modelId: "claude-3-opus-20240229",
+  modelId: "claude-3-haiku-20240229",
   modelName: "Claude 3 Haiku",
   provider: "anthropic",
   hostedId: "claude-3-haiku-20240229",
