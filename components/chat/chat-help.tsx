@@ -2,6 +2,7 @@ import useHotkey from "@/lib/hooks/use-hotkey"
 import {
   IconBrandGithub,
   IconBrandX,
+  IconBrowser,
   IconHelpCircle,
   IconQuestionMark
 } from "@tabler/icons-react"
@@ -35,11 +36,11 @@ export const ChatHelp: FC<ChatHelpProps> = ({}) => {
           <div className="flex space-x-2">
             <Link
               className="cursor-pointer hover:opacity-50"
-              href="https://twitter.com/PixelVerseAI_"
+              href="https://ai.pixelverse.tech"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <IconBrandX />
+              <IconBrowser />
             </Link>
           </div>
 
