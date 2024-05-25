@@ -29,10 +29,11 @@ export async function POST(request: Request) {
       messages: messages as ChatCompletionCreateParamsBase["messages"],
       temperature: chatSettings.temperature,
       max_tokens:
-        chatSettings.model === "gpt-4-vision-preview" ||
-        chatSettings.model === "gpt-4o"
-          ? 4096
-          : null, // TODO: Fix
+      chatSettings.model === "gpt-4-1106-vision-preview"
+        ? 250000
+        : chatSettings.model === "gpt-4o"
+        ? 4096
+        : null,
       stream: true
     })
 

@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       case "gpt-4-turbo-preview":
         DEPLOYMENT_ID = profile.azure_openai_45_turbo_id || ""
         break
-      case "gpt-4-vision-preview":
+      case "gpt-4-1106-vision-preview":
         DEPLOYMENT_ID = profile.azure_openai_45_vision_id || ""
         break
       default:
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       model: DEPLOYMENT_ID as ChatCompletionCreateParamsBase["model"],
       messages: messages as ChatCompletionCreateParamsBase["messages"],
       temperature: chatSettings.temperature,
-      max_tokens: chatSettings.model === "gpt-4-vision-preview" ? 4096 : null, // TODO: Fix
+      max_tokens: chatSettings.model === "gpt-4-1106-vision-preview" ? 4096 : null, // TODO: Fix
       stream: true
     })
 
