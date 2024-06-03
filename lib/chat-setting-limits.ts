@@ -41,11 +41,11 @@ export const CHAT_SETTING_LIMITS: Record<LLMID, ChatSettingLimits> = {
   },
   
   // GOOGLE MODELS
-  "gemini-1.5-pro-latest": {
+  "	gemini-1.5-flash-latest": {
     MIN_TEMPERATURE: 0.0,
     MAX_TEMPERATURE: 1.0,
     MAX_TOKEN_OUTPUT_LENGTH: 8192,
-    MAX_CONTEXT_LENGTH: 1040384
+    MAX_CONTEXT_LENGTH: 1048576
   },
   "gemini-pro": {
     MIN_TEMPERATURE: 0.0,
@@ -53,12 +53,12 @@ export const CHAT_SETTING_LIMITS: Record<LLMID, ChatSettingLimits> = {
     MAX_TOKEN_OUTPUT_LENGTH: 2048,
     MAX_CONTEXT_LENGTH: 30720
   },
-  // "gemini-1.5-pro-latest": {
-  //   MIN_TEMPERATURE: 0.0,
-  //   MAX_TEMPERATURE: 1.0,
-  //   MAX_TOKEN_OUTPUT_LENGTH: 1000000,
-  //   MAX_CONTEXT_LENGTH: 1000000
-  // },
+  "gemini-1.5-pro-latest": {
+    MIN_TEMPERATURE: 0.0,
+    MAX_TEMPERATURE: 1.0,
+    MAX_TOKEN_OUTPUT_LENGTH: 8192,
+    MAX_CONTEXT_LENGTH: 1048576
+  },
   "gemini-pro-vision": {
     MIN_TEMPERATURE: 0.0,
     MAX_TEMPERATURE: 1.0,
@@ -125,7 +125,7 @@ export const CHAT_SETTING_LIMITS: Record<LLMID, ChatSettingLimits> = {
     MAX_TOKEN_OUTPUT_LENGTH: 4096,
     MAX_CONTEXT_LENGTH: 4096
     // MAX_CONTEXT_LENGTH: 16385 (TODO: Change this back to 16385 when OpenAI bumps the model)
-  },
+  },  
   "gpt-4-turbo-preview": {
     MIN_TEMPERATURE: 0.0,
     MAX_TEMPERATURE: 2.0,
