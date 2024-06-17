@@ -24,7 +24,10 @@ export async function POST(request: Request) {
     const openai = new OpenAI({
       apiKey: profile.openai_api_key || "",
       organization: profile.openai_organization_id,
-      baseURL: "https://gateway.ai.cloudflare.com/v1/77a0b1436313aeb84549202bdd962b63/pixelverseaisystems/openai"
+      baseURL: "https://gateway.ai.cloudflare.com/v1/77a0b1436313aeb84549202bdd962b63/pixelverseaisystems/openai",
+      headers: {
+        'cf-cache-ttl': 172800000
+      }
     });
 
     const response = await openai.chat.completions.create({
