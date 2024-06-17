@@ -751,7 +751,8 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                     <Label>Your current plan is: PixelVerseAI <span className="bg-blue-500 text-white rounded-full px-2 py-1">Plus/Max</span></Label>
                   </div>
                   <Label className="text-sm text-gray-400">Note: Plus & Max members share the same dashboard, however, Max users get unlimited usage & more models.</Label>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/5kA8xz3rpb3rgh2aEE', '_blank')}>Manage Subscription</button>
+                  <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/eVaaIGaJX5ox5BC7ss', '_blank')}>Manage Subscription</button>
+                  <a href="https://ai.pixelverse.tech/policy/pixelversechats">View the PixelVerseAI Chats Policies</a>
                 </div>
               </div>
             </TabsContent>
