@@ -15,14 +15,17 @@ export async function POST(request: Request) {
   }
 
   try {
+
+    
     const profile = await getServerProfile()
 
     checkApiKey(profile.openai_api_key, "OpenAI")
 
     const openai = new OpenAI({
       apiKey: profile.openai_api_key || "",
-      organization: profile.openai_organization_id
-    })
+      organization: profile.openai_organization_id,
+      baseURL: "https://gateway.ai.cloudflare.com/v1/77a0b1436313aeb84549202bdd962b63/pixelverseaisystems/openai"
+    });
 
     const response = await openai.chat.completions.create({
       model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
