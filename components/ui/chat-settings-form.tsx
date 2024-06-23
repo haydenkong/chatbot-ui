@@ -39,7 +39,7 @@ export const ChatSettingsForm: FC<ChatSettingsFormProps> = ({
 
   return (
     <div className="space-y-3">
-      {/* <div className="space-y-1">
+      <div className="space-y-1">
         <Label>Model</Label>
 
         <ModelSelect
@@ -48,7 +48,7 @@ export const ChatSettingsForm: FC<ChatSettingsFormProps> = ({
             onChangeChatSettings({ ...chatSettings, model })
           }}
         />
-      </div> */}
+      </div>
 
       <div className="space-y-1">
         <Label>Prompt</Label>
