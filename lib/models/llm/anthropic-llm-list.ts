@@ -47,7 +47,7 @@ const CLAUDE_3_SONNET: LLM = {
 
 // Claude 3 Opus (UPDATED 03/04/24)
 const CLAUDE_3_OPUS: LLM = {
-  modelId: "claude-3-5-sonnet-20240620",
+  modelId: "claude-3-5-sonnet-20240622",
   modelName: "Claude 3 Opus",
   provider: "anthropic",
   hostedId: "claude-3-opus-20240229",
