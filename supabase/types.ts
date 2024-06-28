@@ -1162,8 +1162,6 @@ export interface Database {
           use_azure_openai: boolean
           user_id: string
           username: string
-          // 
-          usage: number[]
         }
         Insert: {
           anthropic_api_key?: string | null
@@ -1192,8 +1190,6 @@ export interface Database {
           use_azure_openai: boolean
           user_id: string
           username: string
-          // 
-          usage: number[]
         }
         Update: {
           anthropic_api_key?: string | null
@@ -1222,8 +1218,6 @@ export interface Database {
           use_azure_openai?: boolean
           user_id?: string
           username?: string
-          // 
-          usage: number[]
         }
         Relationships: [
           {
