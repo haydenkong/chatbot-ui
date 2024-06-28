@@ -1,51 +1,51 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { Profile, TablesInsert, TablesUpdate } from "@/supabase/types"
 
-export const getProfileByUserId = async (userId: string) => {
+export const getProfileByUserId = async (userId: string): Promise<Profile> => {
   const { data: profile, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("user_id", userId)
     .single()
 
-  if (!profile) {
-    throw new Error(error.message)
+  if (error || !profile) {
+    throw new Error(error?.message || "Profile not found")
   }
 
-  return profile
+  return profile as Profile
 }
 
-export const getProfilesByUserId = async (userId: string) => {
+export const getProfilesByUserId = async (userId: string): Promise<Profile[]> => {
   const { data: profiles, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("user_id", userId)
 
-  if (!profiles) {
-    throw new Error(error.message)
+  if (error || !profiles) {
+    throw new Error(error?.message || "Profiles not found")
   }
 
-  return profiles
+  return profiles as Profile[]
 }
 
-export const createProfile = async (profile: TablesInsert<"profiles">) => {
+export const createProfile = async (profile: TablesInsert<"profiles">): Promise<Profile> => {
   const { data: createdProfile, error } = await supabase
     .from("profiles")
     .insert([{ ...profile, usage: JSON.stringify({ count: 0, lastReset: new Date().toISOString() }) }])
     .select("*")
     .single()
 
-  if (error) {
-    throw new Error(error.message)
+  if (error || !createdProfile) {
+    throw new Error(error?.message || "Failed to create profile")
   }
 
-  return createdProfile
+  return createdProfile as Profile
 }
 
 export const updateProfile = async (
   profileId: string,
   profile: TablesUpdate<"profiles">
-) => {
+): Promise<Profile> => {
   const { data: updatedProfile, error } = await supabase
     .from("profiles")
     .update(profile)
@@ -53,14 +53,14 @@ export const updateProfile = async (
     .select("*")
     .single()
 
-  if (error) {
-    throw new Error(error.message)
+  if (error || !updatedProfile) {
+    throw new Error(error?.message || "Failed to update profile")
   }
 
-  return updatedProfile
+  return updatedProfile as Profile
 }
 
-export const deleteProfile = async (profileId: string) => {
+export const deleteProfile = async (profileId: string): Promise<boolean> => {
   const { error } = await supabase.from("profiles").delete().eq("id", profileId)
 
   if (error) {
@@ -70,15 +70,15 @@ export const deleteProfile = async (profileId: string) => {
   return true
 }
 
-export const incrementUsageCount = async (profileId: string) => {
+export const incrementUsageCount = async (profileId: string): Promise<number> => {
   const { data: profile, error } = await supabase
     .from("profiles")
     .select("usage")
     .eq("id", profileId)
     .single()
 
-  if (error) {
-    throw new Error(error.message)
+  if (error || !profile) {
+    throw new Error(error?.message || "Failed to fetch profile")
   }
 
   const usage = JSON.parse(profile.usage || '{"count": 0, "lastReset": ""}')
@@ -105,15 +105,15 @@ export const incrementUsageCount = async (profileId: string) => {
   return usage.count
 }
 
-export const checkRateLimit = async (profileId: string) => {
+export const checkRateLimit = async (profileId: string): Promise<boolean> => {
   const { data: profile, error } = await supabase
     .from("profiles")
     .select("usage")
     .eq("id", profileId)
     .single()
 
-  if (error) {
-    throw new Error(error.message)
+  if (error || !profile) {
+    throw new Error(error?.message || "Failed to fetch profile")
   }
 
   const usage = JSON.parse(profile.usage || '{"count": 0, "lastReset": ""}')
