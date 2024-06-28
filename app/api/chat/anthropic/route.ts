@@ -5,61 +5,20 @@ import { ChatSettings } from "@/types"
 import Anthropic from "@anthropic-ai/sdk"
 import { AnthropicStream, StreamingTextResponse } from "ai"
 import { NextRequest, NextResponse } from "next/server"
-import { getProfileByUserId, updateProfile } from "@/db/profile"
-
-// Define Profile type
-type Profile = {
-  id: string;
-  user_id: string;
-  anthropic_api_key: string | null;
-  azure_openai_35_turbo_id: string | null;
-  azure_openai_45_turbo_id: string | null;
-  azure_openai_45_vision_id: string | null;
-  azure_openai_api_key: string | null;
-  // Add other existing properties...
-  username: string;
-  usage: number[]; // Add this line
-}
 
 export const runtime = "edge"
 
 export async function POST(request: NextRequest) {
   const json = await request.json()
-  const { chatSettings, messages, userId } = json as {
+  const { chatSettings, messages } = json as {
     chatSettings: ChatSettings
     messages: any[]
-    userId: string
   }
 
   try {
-    const profile: Profile = await getProfileByUserId(userId) as Profile
+    const profile = await getServerProfile()
 
     checkApiKey(profile.anthropic_api_key, "Anthropic")
-
-    // Check message usage limit
-    const currentTime = new Date().getTime()
-    const fiveHoursInMillis = 5 * 60 * 60 * 1000
-    const messageTimestamps = profile.usage || []
-
-    // Filter timestamps to keep only those within the last 5 hours
-    const recentTimestamps = messageTimestamps.filter((timestamp: number) => {
-      return currentTime - timestamp <= fiveHoursInMillis
-    })
-
-    if (recentTimestamps.length >= 8) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Message limit exceeded. Please wait before sending more messages."
-        }),
-        { status: 429 }
-      )
-    }
-
-    // Add current timestamp to usage
-    recentTimestamps.push(currentTime)
-
-    // Update profile with new usage data
-    await updateProfile(profile.id, { usage: recentTimestamps })
 
     let ANTHROPIC_FORMATTED_MESSAGES: any = messages.slice(1)
 
@@ -116,7 +75,7 @@ export async function POST(request: NextRequest) {
     if (totalTokens > maxContextTokens) {
       return new NextResponse(
         JSON.stringify({
-          message: `Input token limit exceeded. Please reduce your input. (200000/200000 tokens)`
+          message: `Input token limit exceeded. Please reduce your input.)`
         }),
         { status: 400 }
       )
