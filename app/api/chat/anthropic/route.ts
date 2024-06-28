@@ -5,7 +5,6 @@ import { ChatSettings } from "@/types"
 import Anthropic from "@anthropic-ai/sdk"
 import { AnthropicStream, StreamingTextResponse } from "ai"
 import { NextRequest, NextResponse } from "next/server"
-import { checkRateLimit, incrementUsageCount } from "@/db/profile"
 
 export const runtime = "edge"
 
@@ -20,20 +19,6 @@ export async function POST(request: NextRequest) {
     const profile = await getServerProfile()
 
     checkApiKey(profile.anthropic_api_key, "Anthropic")
-
-    // Check rate limit
-    const isWithinLimit = await checkRateLimit(profile.id)
-    if (!isWithinLimit) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Rate limit exceeded. Please try again later."
-        }),
-        { status: 429 }
-      )
-    }
-
-    // Increment usage count
-    await incrementUsageCount(profile.id)
 
     let ANTHROPIC_FORMATTED_MESSAGES: any = messages.slice(1)
 
