@@ -1218,6 +1218,7 @@ export interface Database {
           use_azure_openai?: boolean
           user_id?: string
           username?: string
+          usage: number[]
         }
         Relationships: [
           {
