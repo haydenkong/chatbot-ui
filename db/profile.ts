@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase/browser-client"
 import { TablesInsert, TablesUpdate } from "@/supabase/types"
-import { Profile } from "@/supabase/types"
+
 
 // Function to get a single profile by user ID
 export const getProfileByUserId = async (userId: string): Promise<Profile> => {
