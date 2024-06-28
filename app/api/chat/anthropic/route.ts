@@ -7,6 +7,20 @@ import { AnthropicStream, StreamingTextResponse } from "ai"
 import { NextRequest, NextResponse } from "next/server"
 import { getProfileByUserId, updateProfile } from "@/db/profile"
 
+// Define Profile type
+type Profile = {
+  id: string;
+  user_id: string;
+  anthropic_api_key: string | null;
+  azure_openai_35_turbo_id: string | null;
+  azure_openai_45_turbo_id: string | null;
+  azure_openai_45_vision_id: string | null;
+  azure_openai_api_key: string | null;
+  // Add other existing properties...
+  username: string;
+  usage: number[]; // Add this line
+}
+
 export const runtime = "edge"
 
 export async function POST(request: NextRequest) {
@@ -18,7 +32,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const profile = await getProfileByUserId(userId)
+    const profile: Profile = await getProfileByUserId(userId) as Profile
 
     checkApiKey(profile.anthropic_api_key, "Anthropic")
 
