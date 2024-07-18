@@ -31,7 +31,7 @@ const GEMINI_PRO_15: LLM = {
   provider: "google",
   hostedId: "gemini-1.5-pro-latest",
   platformLink: GOOGLE_PLATORM_LINK,
-  imageInput: false
+  imageInput: true
 }
 
 // Gemini Pro Vision (UPDATED 12/22/23)
