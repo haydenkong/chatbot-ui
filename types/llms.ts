@@ -43,8 +43,14 @@ export type MistralLLMID =
 export type GroqLLMID =
   | "llama3-8b-8192" // LLaMA3-8b
   | "llama3-70b-8192" // LLaMA3-70b
+  | "llama-3.1-8b-instant" // LLaMA3.1-8b
+  | "llama-3.1-70b-versatile" // LLaMA3.1-70b
+  | "llama-3.2-3b-preview" // LLaMA3.2-3b
+  | "llama-3.2-11b-vision-preview" // LLaMA3.2-11b
+  | "llama-3.2-90b-text-preview" // LLaMA3.2-90b
   | "mixtral-8x7b-32768" // Mixtral-8x7b
   | "gemma-7b-it" // Gemma-7b IT
+  | "gemma2-9b-it" // Gemma2-70b IT
 
 // Perplexity Models (UPDATED 1/31/24)
 export type PerplexityLLMID =
