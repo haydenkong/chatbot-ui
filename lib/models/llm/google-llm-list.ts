@@ -7,7 +7,7 @@ const GOOGLE_PLATORM_LINK = "https://ai.google.dev/"
 // Gemini Flash (UPDATED 05/28/24)
 const GEMINI_FLASH: LLM = {
   modelId: "gemini-1.5-flash-latest",
-  modelName: "Gemini Flash",
+  modelName: "Gemini 1.5 Flash",
   provider: "google",
   hostedId: "	gemini-1.5-flash-latest",
   platformLink: GOOGLE_PLATORM_LINK,
