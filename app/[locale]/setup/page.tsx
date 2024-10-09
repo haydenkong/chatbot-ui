@@ -161,9 +161,9 @@ export default function SetupPage() {
       case 1:
         return (
           <StepContainer
-            stepDescription="Let's create your profile."
+            stepDescription="Let's create your profile!"
             stepNum={currentStep}
-            stepTitle="Welcome to PixelVerseAI Labs Premium"
+            stepTitle="Welcome to PixelVerseAI Chats"
             onShouldProceed={handleShouldProceed}
             showNextButton={!!(username && usernameAvailable)}
             showBackButton={false}
