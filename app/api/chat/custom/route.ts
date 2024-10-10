@@ -36,33 +36,7 @@ export async function POST(request: Request) {
       throw new Error(error.message)
     }
 
-    const { data: userProfile, error: profileError } = await supabaseAdmin
-      .from("profiles")
-      .select("tier, messages_sent_today")
-      .eq("user_id", customModel.user_id)
-      .single()
-
-    if (profileError || !userProfile) {
-      throw new Error(profileError?.message || "User profile not found")
-    }
-
-    const userTier = userProfile.tier
-    const messagesSentToday = userProfile.messages_sent_today[chatSettings.model] || 0
-    const messageLimit = CHAT_SETTING_LIMITS[chatSettings.model].MESSAGE_LIMITS[userTier]
-
-    if (messagesSentToday >= messageLimit) {
-      return new Response(
-        JSON.stringify({
-          message: `You have reached the daily message limit for ${chatSettings.model}. Please upgrade your plan to send more messages.`
-        }),
-        { status: 400 }
-      )
-    }
-
-    if (messageLimit - messagesSentToday <= 3) {
-      // Display warning if less than 3 messages are left
-      console.warn(`${messageLimit - messagesSentToday} Messages Left for today. Upgrade to get more usage.`)
-    }
+    await checkAndUpdateMessageLimit(customModel.user_id, chatSettings.model)
 
     const custom = new OpenAI({
       apiKey: customModel.api_key || "",
@@ -77,21 +51,6 @@ export async function POST(request: Request) {
     })
 
     const stream = OpenAIStream(response)
-
-    // Update messages_sent_today field
-    const updatedMessagesSentToday = {
-      ...userProfile.messages_sent_today,
-      [chatSettings.model]: messagesSentToday + 1
-    }
-
-    const { error: updateError } = await supabaseAdmin
-      .from("profiles")
-      .update({ messages_sent_today: updatedMessagesSentToday })
-      .eq("user_id", customModel.user_id)
-
-    if (updateError) {
-      throw new Error(updateError.message)
-    }
 
     return new StreamingTextResponse(stream)
   } catch (error: any) {
@@ -109,5 +68,49 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify({ message: errorMessage }), {
       status: errorCode
     })
+  }
+}
+
+export async function checkAndUpdateMessageLimit(userId: string, model: string) {
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
+  const { data, error } = await supabaseAdmin
+    .from<UserProfile>("profiles")
+    .select("tier, messages_sent_today")
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const userProfile = data as UserProfile;
+  const userTier = userProfile.tier;
+  const messagesSentToday = userProfile.messages_sent_today[model] || 0;
+  const messageLimit = CHAT_SETTING_LIMITS[model].MESSAGE_LIMITS[userTier];
+
+  if (messagesSentToday >= messageLimit) {
+    throw new Error(`You have reached the daily message limit for ${model}. Please upgrade your plan to send more messages.`);
+  }
+
+  if (messageLimit - messagesSentToday <= 3) {
+    console.warn(`${messageLimit - messagesSentToday} Messages Left for today. Upgrade to get more usage.`);
+  }
+
+  const updatedMessagesSentToday = {
+    ...userProfile.messages_sent_today,
+    [model]: messagesSentToday + 1
+  };
+
+  const { error: updateError } = await supabaseAdmin
+    .from("profiles")
+    .update({ messages_sent_today: updatedMessagesSentToday })
+    .eq("user_id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
   }
 }
