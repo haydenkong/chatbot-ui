@@ -31,6 +31,7 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
   })
 
   const [isTyping, setIsTyping] = useState<boolean>(false)
+  const [messagesLeft, setMessagesLeft] = useState<number | null>(null)
 
   const {
     isAssistantPickerOpen,
@@ -80,6 +81,16 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
       handleFocusChatInput()
     }, 200) // FIX: hacky
   }, [selectedPreset, selectedAssistant])
+
+  useEffect(() => {
+    if (chatSettings && chatSettings.model) {
+      const model = chatSettings.model
+      const tier = profile.tier
+      const messagesSentToday = profile.messages_sent_today[model] || 0
+      const messageLimit = CHAT_SETTING_LIMITS[model].MESSAGE_LIMITS[tier]
+      setMessagesLeft(messageLimit - messagesSentToday)
+    }
+  }, [chatSettings])
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (!isTyping && event.key === "Enter" && !event.shiftKey) {
@@ -279,6 +290,12 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
           )}
         </div>
       </div>
+
+      {messagesLeft !== null && messagesLeft <= 3 && (
+        <div className="text-center text-red-500">
+          {messagesLeft} {messagesLeft === 1 ? "Message" : "Messages"} Left for today. Upgrade to get more usage.
+        </div>
+      )}
     </>
   )
 }

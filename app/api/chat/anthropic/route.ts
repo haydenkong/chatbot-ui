@@ -20,6 +20,21 @@ export async function POST(request: NextRequest) {
 
     checkApiKey(profile.anthropic_api_key, "Anthropic")
 
+    // Check if the user has reached the message limit for the day
+    const model = chatSettings.model
+    const tier = profile.tier
+    const messagesSentToday = profile.messages_sent_today[model] || 0
+    const messageLimit = CHAT_SETTING_LIMITS[model].MESSAGE_LIMITS[tier]
+
+    if (messagesSentToday >= messageLimit) {
+      return new NextResponse(
+        JSON.stringify({
+          message: `You have reached the message limit for ${model} today. Please try again tomorrow or upgrade your plan.`
+        }),
+        { status: 429 }
+      )
+    }
+
     let ANTHROPIC_FORMATTED_MESSAGES: any = messages.slice(1)
 
     ANTHROPIC_FORMATTED_MESSAGES = ANTHROPIC_FORMATTED_MESSAGES?.map(
@@ -98,6 +113,18 @@ export async function POST(request: NextRequest) {
 
       try {
         const stream = AnthropicStream(response)
+
+        // Update the number of messages sent today for the model
+        const updatedMessagesSentToday = {
+          ...profile.messages_sent_today,
+          [model]: messagesSentToday + 1
+        }
+
+        await supabaseAdmin
+          .from("profiles")
+          .update({ messages_sent_today: updatedMessagesSentToday })
+          .eq("user_id", profile.user_id)
+
         return new StreamingTextResponse(stream)
       } catch (error: any) {
         console.error("Error parsing Anthropic API response:", error)

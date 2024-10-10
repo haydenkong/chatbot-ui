@@ -34,7 +34,12 @@ CREATE TABLE IF NOT EXISTS profiles (
     mistral_api_key TEXT CHECK (char_length(mistral_api_key) <= 1000),
     openai_api_key TEXT CHECK (char_length(openai_api_key) <= 1000),
     openai_organization_id TEXT CHECK (char_length(openai_organization_id) <= 1000),
-    perplexity_api_key TEXT CHECK (char_length(perplexity_api_key) <= 1000)
+    perplexity_api_key TEXT CHECK (char_length(perplexity_api_key) <= 1000),
+
+    -- Pe68c
+    tier TEXT NOT NULL DEFAULT 'FREE',
+    -- P8140
+    messages_sent_today JSONB NOT NULL DEFAULT '{}'
 );
 
 -- INDEXES --

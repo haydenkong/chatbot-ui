@@ -2,6 +2,8 @@ import { checkApiKey, getServerProfile } from "@/lib/server/server-chat-helpers"
 import { ChatSettings } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
 import OpenAI from "openai"
+import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits"
+import { createClient } from "@supabase/supabase-js"
 
 export const runtime = "edge"
 
@@ -17,6 +19,21 @@ export async function POST(request: Request) {
 
     checkApiKey(profile.perplexity_api_key, "Perplexity")
 
+    // Check if the user has reached the message limit for the day
+    const model = chatSettings.model
+    const tier = profile.tier
+    const messagesSentToday = profile.messages_sent_today[model] || 0
+    const messageLimit = CHAT_SETTING_LIMITS[model].MESSAGE_LIMITS[tier]
+
+    if (messagesSentToday >= messageLimit) {
+      return new Response(
+        JSON.stringify({
+          message: `You have reached the message limit for ${model} today. Please try again tomorrow or upgrade your plan.`
+        }),
+        { status: 429 }
+      )
+    }
+
     // Perplexity is compatible the OpenAI SDK
     const perplexity = new OpenAI({
       apiKey: profile.perplexity_api_key || "",
@@ -30,6 +47,22 @@ export async function POST(request: Request) {
     })
 
     const stream = OpenAIStream(response)
+
+    // Update the number of messages sent today for the model
+    const updatedMessagesSentToday = {
+      ...profile.messages_sent_today,
+      [model]: messagesSentToday + 1
+    }
+
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    await supabaseAdmin
+      .from("profiles")
+      .update({ messages_sent_today: updatedMessagesSentToday })
+      .eq("user_id", profile.user_id)
 
     return new StreamingTextResponse(stream)
   } catch (error: any) {

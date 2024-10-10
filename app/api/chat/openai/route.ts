@@ -15,19 +15,29 @@ export async function POST(request: Request) {
   }
 
   try {
-
-    
     const profile = await getServerProfile()
 
     checkApiKey(profile.openai_api_key, "OpenAI")
+
+    // Check if the user has reached the message limit for the day
+    const model = chatSettings.model
+    const tier = profile.tier
+    const messagesSentToday = profile.messages_sent_today[model] || 0
+    const messageLimit = CHAT_SETTING_LIMITS[model].MESSAGE_LIMITS[tier]
+
+    if (messagesSentToday >= messageLimit) {
+      return new Response(
+        JSON.stringify({
+          message: `You have reached the message limit for ${model} today. Please try again tomorrow or upgrade your plan.`
+        }),
+        { status: 429 }
+      )
+    }
 
     const openai = new OpenAI({
       apiKey: profile.openai_api_key || "",
       organization: profile.openai_organization_id,
       baseURL: "https://gateway.ai.cloudflare.com/v1/77a0b1436313aeb84549202bdd962b63/pixelverseaisystems/openai",
-      // headers: {
-      //   'cf-cache-ttl': 172800000
-      // }
     });
 
     const response = await openai.chat.completions.create({
@@ -43,6 +53,17 @@ export async function POST(request: Request) {
     })
 
     const stream = OpenAIStream(response)
+
+    // Update the number of messages sent today for the model
+    const updatedMessagesSentToday = {
+      ...profile.messages_sent_today,
+      [model]: messagesSentToday + 1
+    }
+
+    await supabaseAdmin
+      .from("profiles")
+      .update({ messages_sent_today: updatedMessagesSentToday })
+      .eq("user_id", profile.user_id)
 
     return new StreamingTextResponse(stream)
   } catch (error: any) {
