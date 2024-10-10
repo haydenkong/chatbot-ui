@@ -20,6 +20,7 @@ import { useChatHandler } from "./chat-hooks/use-chat-handler"
 import { useChatHistoryHandler } from "./chat-hooks/use-chat-history"
 import { usePromptAndCommand } from "./chat-hooks/use-prompt-and-command"
 import { useSelectFileHandler } from "./chat-hooks/use-select-file-handler"
+import { MESSAGE_LIMITS, TIERS } from "@/lib/tier-limits"
 
 interface ChatInputProps {}
 
@@ -54,7 +55,9 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
     chatSettings,
     selectedTools,
     setSelectedTools,
-    assistantImages
+    assistantImages,
+    userTier,
+    userMessageCount
   } = useContext(ChatbotUIContext)
 
   const {
@@ -161,6 +164,8 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
       }
     }
   }
+
+  const userMessageLimit = MESSAGE_LIMITS[chatSettings.model][userTier]
 
   return (
     <>
@@ -279,6 +284,12 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
           )}
         </div>
       </div>
+
+      {userMessageCount >= userMessageLimit - 3 && userMessageCount < userMessageLimit && (
+        <div className="text-center text-yellow-500 mt-2">
+          {userMessageLimit - userMessageCount} Messages Left for today. Upgrade to get more usage.
+        </div>
+      )}
     </>
   )
 }

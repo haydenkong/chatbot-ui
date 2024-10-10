@@ -1,18 +1,20 @@
 import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits"
-import { checkApiKey, getServerProfile } from "@/lib/server/server-chat-helpers"
+import { checkApiKey, getServerProfile, trackMessageCount } from "@/lib/server/server-chat-helpers"
 import { getBase64FromDataURL, getMediaTypeFromDataURL } from "@/lib/utils"
 import { ChatSettings } from "@/types"
 import Anthropic from "@anthropic-ai/sdk"
 import { AnthropicStream, StreamingTextResponse } from "ai"
 import { NextRequest, NextResponse } from "next/server"
+import { MESSAGE_LIMITS } from "@/lib/tier-limits"
 
 export const runtime = "edge"
 
 export async function POST(request: NextRequest) {
   const json = await request.json()
-  const { chatSettings, messages } = json as {
+  const { chatSettings, messages, userTier } = json as {
     chatSettings: ChatSettings
     messages: any[]
+    userTier: string
   }
 
   try {
@@ -76,6 +78,19 @@ export async function POST(request: NextRequest) {
       return new NextResponse(
         JSON.stringify({
           message: `Input token limit exceeded. Please reduce your input.`
+        }),
+        { status: 400 }
+      )
+    }
+
+    // Check message limits based on user's tier
+    const userMessageLimit = MESSAGE_LIMITS[chatSettings.model][userTier]
+    const userMessageCount = await trackMessageCount(userTier, chatSettings.model)
+
+    if (userMessageCount >= userMessageLimit) {
+      return new NextResponse(
+        JSON.stringify({
+          message: `Message limit reached for today. Upgrade to get more usage.`
         }),
         { status: 400 }
       )
