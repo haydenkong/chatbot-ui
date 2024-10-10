@@ -1,6 +1,8 @@
 import { checkApiKey, getServerProfile } from "@/lib/server/server-chat-helpers"
 import { ChatSettings } from "@/types"
 import { GoogleGenerativeAI } from "@google/generative-ai"
+import { createClient } from "@supabase/supabase-js"
+import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits"
 
 export const runtime = "edge"
 
@@ -15,6 +17,39 @@ export async function POST(request: Request) {
     const profile = await getServerProfile()
 
     checkApiKey(profile.google_gemini_api_key, "Google")
+
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    const { data: userProfile, error } = await supabaseAdmin
+      .from("profiles")
+      .select("tier, messages_sent_today")
+      .eq("user_id", profile.user_id)
+      .single()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    const userTier = userProfile.tier
+    const messagesSentToday = userProfile.messages_sent_today[chatSettings.model] || 0
+    const messageLimit = CHAT_SETTING_LIMITS[chatSettings.model].MESSAGE_LIMITS[userTier]
+
+    if (messagesSentToday >= messageLimit) {
+      return new Response(
+        JSON.stringify({
+          message: `You have reached the daily message limit for ${chatSettings.model}. Please upgrade your plan to send more messages.`
+        }),
+        { status: 400 }
+      )
+    }
+
+    if (messageLimit - messagesSentToday <= 3) {
+      // Display warning if less than 3 messages are left
+      console.warn(`${messageLimit - messagesSentToday} Messages Left for today. Upgrade to get more usage.`)
+    }
 
     const genAI = new GoogleGenerativeAI(profile.google_gemini_api_key || "")
     const googleModel = genAI.getGenerativeModel({ model: chatSettings.model })
@@ -40,6 +75,21 @@ export async function POST(request: Request) {
         controller.close()
       }
     })
+
+    // Update messages_sent_today field
+    const updatedMessagesSentToday = {
+      ...userProfile.messages_sent_today,
+      [chatSettings.model]: messagesSentToday + 1
+    }
+
+    const { error: updateError } = await supabaseAdmin
+      .from("profiles")
+      .update({ messages_sent_today: updatedMessagesSentToday })
+      .eq("user_id", profile.user_id)
+
+    if (updateError) {
+      throw new Error(updateError.message)
+    }
 
     return new Response(readableStream, {
       headers: { "Content-Type": "text/plain" }
