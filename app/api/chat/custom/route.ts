@@ -71,7 +71,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function checkAndUpdateMessageLimit(userId: string, model: string) {
+async function checkAndUpdateMessageLimit(userId: string, model: string) {
   const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
