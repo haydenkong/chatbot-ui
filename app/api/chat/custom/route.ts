@@ -4,6 +4,7 @@ import { ChatSettings } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
 import OpenAI from "openai"
 import { createClient } from "@supabase/supabase-js"
+import { Database } from "@/supabase/types" // Add this import
 
 interface UserProfile {
   tier: string
