@@ -1,14 +1,15 @@
-import { checkApiKey, getServerProfile } from "@/lib/server/server-chat-helpers"
+import { checkApiKey, getServerProfile, trackMessageCount } from "@/lib/server/server-chat-helpers"
 import { ChatAPIPayload } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
 import OpenAI from "openai"
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions.mjs"
+import { MESSAGE_LIMITS } from "@/lib/tier-limits"
 
 export const runtime = "edge"
 
 export async function POST(request: Request) {
   const json = await request.json()
-  const { chatSettings, messages } = json as ChatAPIPayload
+  const { chatSettings, messages, userTier } = json as ChatAPIPayload & { userTier: string }
 
   try {
     const profile = await getServerProfile()
@@ -41,6 +42,19 @@ export async function POST(request: Request) {
         {
           status: 400
         }
+      )
+    }
+
+    // Check message limits based on user's tier
+    const userMessageLimit = MESSAGE_LIMITS[chatSettings.model][userTier]
+    const userMessageCount = await trackMessageCount(userTier, chatSettings.model)
+
+    if (userMessageCount >= userMessageLimit) {
+      return new Response(
+        JSON.stringify({
+          message: `Message limit reached for today. Upgrade to get more usage.`
+        }),
+        { status: 400 }
       )
     }
 

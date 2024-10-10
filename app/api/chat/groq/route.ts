@@ -1,21 +1,37 @@
 import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits"
-import { checkApiKey, getServerProfile } from "@/lib/server/server-chat-helpers"
+import { checkApiKey, getServerProfile, trackMessageCount } from "@/lib/server/server-chat-helpers"
 import { ChatSettings } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
 import OpenAI from "openai"
+import { MESSAGE_LIMITS } from "@/lib/tier-limits"
 
 export const runtime = "edge"
+
 export async function POST(request: Request) {
   const json = await request.json()
-  const { chatSettings, messages } = json as {
+  const { chatSettings, messages, userTier } = json as {
     chatSettings: ChatSettings
     messages: any[]
+    userTier: string
   }
 
   try {
     const profile = await getServerProfile()
 
-    checkApiKey(profile.groq_api_key, "G")
+    checkApiKey(profile.groq_api_key, "Groq")
+
+    // Check message limits based on user's tier
+    const userMessageLimit = MESSAGE_LIMITS[chatSettings.model][userTier]
+    const userMessageCount = await trackMessageCount(userTier, chatSettings.model)
+
+    if (userMessageCount >= userMessageLimit) {
+      return new Response(
+        JSON.stringify({
+          message: `Message limit reached for today. Upgrade to get more usage.`
+        }),
+        { status: 400 }
+      )
+    }
 
     // Groq is compatible with the OpenAI SDK
     const groq = new OpenAI({

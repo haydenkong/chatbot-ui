@@ -136,6 +136,12 @@ interface ChatbotUIContext {
   setSelectedTools: Dispatch<SetStateAction<Tables<"tools">[]>>
   toolInUse: string
   setToolInUse: Dispatch<SetStateAction<string>>
+
+  // NEW PROPERTIES FOR TIER AND MESSAGE COUNT
+  userTier: string
+  setUserTier: Dispatch<SetStateAction<string>>
+  userMessageCount: number
+  setUserMessageCount: Dispatch<SetStateAction<number>>
 }
 
 export const ChatbotUIContext = createContext<ChatbotUIContext>({
@@ -261,5 +267,11 @@ export const ChatbotUIContext = createContext<ChatbotUIContext>({
   selectedTools: [],
   setSelectedTools: () => {},
   toolInUse: "none",
-  setToolInUse: () => {}
+  setToolInUse: () => {},
+
+  // NEW PROPERTIES FOR TIER AND MESSAGE COUNT
+  userTier: "",
+  setUserTier: () => {},
+  userMessageCount: 0,
+  setUserMessageCount: () => {}
 })

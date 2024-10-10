@@ -2,6 +2,7 @@ import { Database, Tables } from "@/supabase/types"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
+import { MESSAGE_LIMITS } from "@/lib/tier-limits"
 
 export async function getServerProfile() {
   const cookieStore = cookies()
@@ -70,4 +71,78 @@ export function checkApiKey(apiKey: string | null, keyName: string) {
   if (apiKey === null || apiKey === "") {
     throw new Error(`${keyName} API Key not found`)
   }
+}
+
+export async function trackMessageCount(userId: string, modelId: string) {
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
+  const today = new Date().toISOString().split("T")[0]
+
+  const { data: userMessageCount, error } = await supabase
+    .from("user_message_counts")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("model_id", modelId)
+    .eq("date", today)
+    .single()
+
+  if (error && error.code !== "PGRST116") {
+    throw new Error("Error fetching user message count")
+  }
+
+  if (userMessageCount) {
+    const { data, error } = await supabase
+      .from("user_message_counts")
+      .update({ message_count: userMessageCount.message_count + 1 })
+      .eq("id", userMessageCount.id)
+
+    if (error) {
+      throw new Error("Error updating user message count")
+    }
+
+    return data.message_count
+  } else {
+    const { data, error } = await supabase
+      .from("user_message_counts")
+      .insert({
+        user_id: userId,
+        model_id: modelId,
+        tier: "FREE", // This should be dynamically set based on the user's tier
+        message_count: 1,
+        date: today
+      })
+
+    if (error) {
+      throw new Error("Error inserting user message count")
+    }
+
+    return data[0].message_count
+  }
+}
+
+export async function getUserMessageCount(userId: string, modelId: string, tier: string) {
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
+  const today = new Date().toISOString().split("T")[0]
+
+  const { data: userMessageCount, error } = await supabase
+    .from("user_message_counts")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("model_id", modelId)
+    .eq("tier", tier)
+    .eq("date", today)
+    .single()
+
+  if (error && error.code !== "PGRST116") {
+    throw new Error("Error fetching user message count")
+  }
+
+  return userMessageCount ? userMessageCount.message_count : 0
 }
