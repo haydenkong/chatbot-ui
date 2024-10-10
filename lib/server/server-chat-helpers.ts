@@ -2,19 +2,12 @@ import { Database, Tables } from "@/supabase/types"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
+import { createClient } from "@supabase/supabase-js"
 
-export async function getServerProfile() {
-  const cookieStore = cookies()
-  const supabase = createServerClient<Database>(
+async function getServerProfile() {
+  const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        }
-      }
-    }
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
   const user = (await supabase.auth.getUser()).data.user
@@ -34,7 +27,7 @@ export async function getServerProfile() {
 
   const profileWithKeys = addApiKeysToProfile(profile)
 
-  // Add the tier property to the profile
+  // Ensure the tier property is added to the profile
   profileWithKeys.tier = profile.tier
 
   return profileWithKeys
@@ -66,7 +59,10 @@ function addApiKeysToProfile(profile: Tables<"profiles">) {
     }
   }
 
-  return profile
+  return {
+    ...profile,
+    ...apiKeys,
+  }
 }
 
 export function checkApiKey(apiKey: string | null, keyName: string) {
