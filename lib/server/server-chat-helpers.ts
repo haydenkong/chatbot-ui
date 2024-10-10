@@ -2,6 +2,8 @@ import { Database, Tables } from "@/supabase/types"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
+import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits"
+import { createClient } from "@supabase/supabase-js"
 
 export async function getServerProfile() {
   const cookieStore = cookies()
@@ -69,5 +71,48 @@ function addApiKeysToProfile(profile: Tables<"profiles">) {
 export function checkApiKey(apiKey: string | null, keyName: string) {
   if (apiKey === null || apiKey === "") {
     throw new Error(`${keyName} API Key not found`)
+  }
+}
+
+export async function checkAndUpdateMessageLimit(userId: string, model: string) {
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
+  const { data: userProfile, error } = await supabaseAdmin
+    .from("profiles")
+    .select("tier, messages_sent_today")
+    .eq("user_id", userId)
+    .single()
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  const userTier = userProfile.tier
+  const messagesSentToday = userProfile.messages_sent_today[model] || 0
+  const messageLimit = CHAT_SETTING_LIMITS[model].MESSAGE_LIMITS[userTier]
+
+  if (messagesSentToday >= messageLimit) {
+    throw new Error(`You have reached the daily message limit for ${model}. Please upgrade your plan to send more messages.`)
+  }
+
+  if (messageLimit - messagesSentToday <= 3) {
+    console.warn(`${messageLimit - messagesSentToday} Messages Left for today. Upgrade to get more usage.`)
+  }
+
+  const updatedMessagesSentToday = {
+    ...userProfile.messages_sent_today,
+    [model]: messagesSentToday + 1
+  }
+
+  const { error: updateError } = await supabaseAdmin
+    .from("profiles")
+    .update({ messages_sent_today: updatedMessagesSentToday })
+    .eq("user_id", userId)
+
+  if (updateError) {
+    throw new Error(updateError.message)
   }
 }

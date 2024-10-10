@@ -5,6 +5,7 @@ import { OpenAIStream, StreamingTextResponse } from "ai"
 import { ServerRuntime } from "next"
 import OpenAI from "openai"
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions.mjs"
+import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits"
 
 export const runtime: ServerRuntime = "edge"
 
@@ -32,6 +33,34 @@ export async function POST(request: Request) {
       throw new Error(error.message)
     }
 
+    const { data: userProfile, error: profileError } = await supabaseAdmin
+      .from("profiles")
+      .select("tier, messages_sent_today")
+      .eq("user_id", customModel.user_id)
+      .single()
+
+    if (profileError) {
+      throw new Error(profileError.message)
+    }
+
+    const userTier = userProfile.tier
+    const messagesSentToday = userProfile.messages_sent_today[chatSettings.model] || 0
+    const messageLimit = CHAT_SETTING_LIMITS[chatSettings.model].MESSAGE_LIMITS[userTier]
+
+    if (messagesSentToday >= messageLimit) {
+      return new Response(
+        JSON.stringify({
+          message: `You have reached the daily message limit for ${chatSettings.model}. Please upgrade your plan to send more messages.`
+        }),
+        { status: 400 }
+      )
+    }
+
+    if (messageLimit - messagesSentToday <= 3) {
+      // Display warning if less than 3 messages are left
+      console.warn(`${messageLimit - messagesSentToday} Messages Left for today. Upgrade to get more usage.`)
+    }
+
     const custom = new OpenAI({
       apiKey: customModel.api_key || "",
       baseURL: customModel.base_url
@@ -45,6 +74,21 @@ export async function POST(request: Request) {
     })
 
     const stream = OpenAIStream(response)
+
+    // Update messages_sent_today field
+    const updatedMessagesSentToday = {
+      ...userProfile.messages_sent_today,
+      [chatSettings.model]: messagesSentToday + 1
+    }
+
+    const { error: updateError } = await supabaseAdmin
+      .from("profiles")
+      .update({ messages_sent_today: updatedMessagesSentToday })
+      .eq("user_id", customModel.user_id)
+
+    if (updateError) {
+      throw new Error(updateError.message)
+    }
 
     return new StreamingTextResponse(stream)
   } catch (error: any) {
