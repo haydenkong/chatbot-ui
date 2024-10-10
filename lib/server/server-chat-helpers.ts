@@ -34,6 +34,9 @@ export async function getServerProfile() {
 
   const profileWithKeys = addApiKeysToProfile(profile)
 
+  // Add the tier property to the profile
+  profileWithKeys.tier = profile.tier
+
   return profileWithKeys
 }
 
