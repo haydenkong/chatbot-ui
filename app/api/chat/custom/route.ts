@@ -2,7 +2,7 @@ import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits"
 import { checkApiKey, getServerProfile } from "@/lib/server/server-chat-helpers"
 import { ChatSettings } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
-import OpenAI from "openai"
+import OpenAI, { ChatCompletionCreateParams } from "openai" // Import the necessary type
 import { createClient } from "@supabase/supabase-js"
 import { Database } from "@/supabase/types"
 
@@ -44,8 +44,8 @@ export async function POST(request: Request) {
     })
 
     const response = await custom.chat.completions.create({
-      model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
-      messages: messages as ChatCompletionCreateParamsBase["messages"],
+      model: chatSettings.model as ChatCompletionCreateParams["model"],
+      messages: messages as ChatCompletionCreateParams["messages"],
       temperature: chatSettings.temperature,
       stream: true
     })
