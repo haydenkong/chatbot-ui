@@ -4,7 +4,7 @@ import { ChatSettings } from "@/types"
 import { OpenAIStream, StreamingTextResponse } from "ai"
 import OpenAI from "openai"
 import { createClient } from "@supabase/supabase-js"
-import { Database } from "@/supabase/types" // Add this import
+import { Database } from "@/supabase/types"
 
 interface UserProfile {
   tier: string
@@ -42,12 +42,12 @@ export async function POST(request: Request) {
       .eq("user_id", customModel.user_id)
       .single()
 
-    if (profileError) {
-      throw new Error(profileError.message)
+    if (profileError || !userProfile) {
+      throw new Error(profileError?.message || "User profile not found")
     }
 
-    const userTier = (userProfile as UserProfile).tier
-    const messagesSentToday = (userProfile as UserProfile).messages_sent_today[chatSettings.model] || 0
+    const userTier = userProfile.tier
+    const messagesSentToday = userProfile.messages_sent_today[chatSettings.model] || 0
     const messageLimit = CHAT_SETTING_LIMITS[chatSettings.model].MESSAGE_LIMITS[userTier]
 
     if (messagesSentToday >= messageLimit) {
