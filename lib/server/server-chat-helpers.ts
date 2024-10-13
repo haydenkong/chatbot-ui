@@ -28,7 +28,7 @@ async function getServerProfile() {
   const profileWithKeys = addApiKeysToProfile(profile)
 
   // Ensure the tier property is added to the profile
-  profileWithKeys.tier = profile.tier
+  profileWithKeys.tier = profile.tier || "FREE" // Add a default tier if necessary
 
   return profileWithKeys
 }
