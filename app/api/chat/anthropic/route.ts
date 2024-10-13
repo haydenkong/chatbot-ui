@@ -5,6 +5,7 @@ import { ChatSettings } from "@/types"
 import Anthropic from "@anthropic-ai/sdk"
 import { AnthropicStream, StreamingTextResponse } from "ai"
 import { NextRequest, NextResponse } from "next/server"
+import { supabase } from "@/lib/supabase/browser-client"
 
 export const runtime = "edge"
 
