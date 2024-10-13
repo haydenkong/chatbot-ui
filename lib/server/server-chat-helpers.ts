@@ -70,3 +70,5 @@ export function checkApiKey(apiKey: string | null, keyName: string) {
     throw new Error(`${keyName} API Key not found`)
   }
 }
+
+export { getServerProfile };
