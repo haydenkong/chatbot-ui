@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     if (errorMessage.toLowerCase().includes("api key not found")) {
       errorMessage =
         "Google Gemini API Key not found. Please set it in your profile settings."
-    } else if (errorMessage.toLowerCase().includes("api key not valid")) {
+    } else if (errorMessage.toLowerCase().includes("Api key not valid")) {
       errorMessage =
         "Google Gemini API Key is incorrect. Please fix it in your profile settings."
     }
