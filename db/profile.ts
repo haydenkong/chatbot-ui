@@ -4,7 +4,7 @@ import { TablesInsert, TablesUpdate } from "@/supabase/types"
 export const getProfileByUserId = async (userId: string) => {
   const { data: profile, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("*, tier")
     .eq("user_id", userId)
     .single()
 
