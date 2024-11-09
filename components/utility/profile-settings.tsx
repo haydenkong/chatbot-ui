@@ -748,12 +748,18 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
               <div className="space-y-4">
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
-                    <Label>Your current plan is: PixelVerseAI <span className="bg-blue-500 text-white rounded-full px-2 py-1">Plus/Max</span></Label>
+                    <Label>Your current plan is: {profile?.tier || "TIER UNAVALIABLE"}</Label>
                   </div>
-                  <Label className="text-sm text-gray-400">Note: Plus & Max members share the same dashboard, however, Max users get unlimited usage & more models.</Label>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/eVaaIGaJX5ox5BC7ss', '_blank')}>Manage Subscription</button>
-                  <Label className="text-sm text-gray-500 text-center"><a href="https://ai.pixelverse.tech/assets/policies/PXVSITD809.pdf">PixelVerse Chats Policy</a></Label>
+                  {profile?.tier && (
+                    <button 
+                      className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" 
+                      onClick={() => window.open('https://billing.stripe.com/p/login/eVaaIGaJX5ox5BC7ss', '_blank')}
+                    >
+                      Manage Subscription
+                    </button>
+                  )}
                 </div>
+                <Label className="text-sm text-gray-500 text-center"><a href="https://ai.pixelverse.tech/assets/policies/PXVSITD809.pdf">PixelVerse Chats Policy</a></Label>
               </div>
             </TabsContent>
 
