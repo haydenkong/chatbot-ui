@@ -33,6 +33,7 @@ export async function GET(request: Request) {
     return new Response(JSON.stringify({ usage }), { status: 200 })
   } catch (error) {
     console.error("Usage fetch error:", error)
-    return new Response(error.message, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+    return new Response(errorMessage, { status: 500 })
   }
 }
