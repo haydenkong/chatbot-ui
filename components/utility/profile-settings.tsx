@@ -6,6 +6,7 @@ import {
   PROFILE_USERNAME_MIN
 } from "@/db/limits"
 import { updateProfile } from "@/db/profile"
+import { TIER_LIMITS } from "@/lib/tier-limits"
 import { uploadProfileImage } from "@/db/storage/profile-images"
 import { exportLocalStorageAsJSON } from "@/lib/export-old-data"
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models"
@@ -23,7 +24,7 @@ import {
 } from "@tabler/icons-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { FC, useCallback, useContext, useRef, useState } from "react"
+import { FC, useCallback, useContext, useRef, useState, useEffect } from "react"
 import { toast } from "sonner"
 import { SIDEBAR_ICON_SIZE } from "../sidebar/sidebar-switcher"
 import { Button } from "../ui/button"
@@ -117,6 +118,27 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
   const [openrouterAPIKey, setOpenrouterAPIKey] = useState(
     profile?.openrouter_api_key || ""
   )
+
+  const [usage, setUsage] = useState<Record<string, number>>({})
+  const [loading, setLoading] = useState(false)
+
+  const fetchUsage = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch("/api/user/usage")
+      const data = await response.json()
+      setUsage(data.usage)
+    } catch (error) {
+      console.error("Error fetching usage:", error)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchUsage()
+  }, [])
+
+  const tierLimits = TIER_LIMITS[profile?.tier || "FREE"]
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -753,6 +775,35 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/eVaaIGaJX5ox5BC7ss', '_blank')}>Manage Subscription</button>
                   <Label className="text-sm text-gray-500 text-center"><a href="https://ai.pixelverse.tech/assets/policies/PXVSITD809.pdf">PixelVerse Chats Policy</a></Label>
                 </div>
+              </div>
+              <div className="mt-6 space-y-4">
+                <Label>Your Usage Today</Label>
+                {loading ? (
+                  <div>Loading usage...</div>
+                ) : (
+                  <div className="space-y-2">
+                    {Object.entries(tierLimits).map(([model, limit]) => {
+                      if (model === "messages_per_day") return null
+                      const used = usage[model] || 0
+                      return (
+                        <div key={model} className="flex justify-between items-center">
+                          <span>{model}:</span>
+                          <span>
+                            {used} / {limit === -1 ? "∞" : limit}
+                          </span>
+                          <Progress 
+                            value={limit === -1 ? 0 : (used / limit) * 100} 
+                            className="w-1/3"
+                          />
+                        </div>
+                      )
+                    })}
+                    <div className="text-sm text-muted-foreground">
+                      Total Messages: {Object.values(usage).reduce((a, b) => a + b, 0)} / 
+                      {tierLimits.messages_per_day === -1 ? "∞" : tierLimits.messages_per_day}
+                    </div>
+                  </div>
+                )}
               </div>
             </TabsContent>
 
