@@ -5,42 +5,35 @@ import { supabase } from "@/lib/supabase/browser-client"
 export async function GET(request: Request) {
   try {
     const profile = await getServerProfile()
-    
-    // Get local midnight in user's timezone
-    const now = new Date()
-    const localMidnight = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate()
-    )
-    
-    // Convert local midnight to UTC for database query
-    const utcMidnight = new Date(
-      localMidnight.getTime() - localMidnight.getTimezoneOffset() * 60000
-    ).toISOString()
+    const today = new Date()
+    today.setUTCHours(0, 0, 0, 0)
 
-    console.log("Local midnight:", localMidnight)
-    console.log("UTC query time:", utcMidnight)
+    console.log("Profile:", profile)
+    console.log("UTC Date used:", today.toISOString())
 
     const { data: messages, error } = await supabase
       .from("messages")
       .select("model, created_at")
       .eq("user_id", profile.user_id)
-      .gte("created_at", utcMidnight)
+      .gte("created_at", today.toISOString())
 
-    if (error) {
-      console.error("Query error:", error)
-      throw error
-    }
+    console.log("Messages found:", messages?.length)
+    console.log("Query error:", error)
+    console.log("Raw messages:", messages)
 
-    const usage = messages?.reduce((acc, msg) => {
+    if (!messages) return new Response("No messages found", { status: 404 })
+
+    const usage = messages.reduce((acc, msg) => {
       acc[msg.model] = (acc[msg.model] || 0) + 1
-      return acc
-    }, {} as Record<string, number>) || {}
+      return acc 
+    }, {} as Record<string, number>)
+
+    console.log("Calculated usage:", usage)
 
     return new Response(JSON.stringify({ usage }), { status: 200 })
   } catch (error) {
     console.error("Usage fetch error:", error)
-    return new Response(String(error), { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+    return new Response(errorMessage, { status: 500 })
   }
 }
