@@ -7,14 +7,19 @@ export const checkMessageLimits = async (
   tier: string, // Keep as string for compatibility
   model: string
 ) => {
-  const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  const today = new Date()
+  const midnight = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+    0, 0, 0, 0
+  )
 
   const { data: messages } = await supabase
     .from("messages")
     .select("model")
     .eq("user_id", userId)
-    .gte("created_at", today.toISOString())
+    .gte("created_at", midnight.toISOString())
 
   if (!messages) return { allowed: false, error: "Could not check limits" }
 
