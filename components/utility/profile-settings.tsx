@@ -11,7 +11,6 @@ import { uploadProfileImage } from "@/db/storage/profile-images"
 import { exportLocalStorageAsJSON } from "@/lib/export-old-data"
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models"
 import { LLM_LIST_MAP } from "@/lib/models/llm/llm-list"
-const [usage, setUsage] = useState<Record<string, number>>({});
 import { supabase } from "@/lib/supabase/browser-client"
 import { cn } from "@/lib/utils"
 import { OpenRouterLLM } from "@/types"
@@ -128,7 +127,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
     try {
       const response = await fetch("/api/user/usage")
       const data = await response.json()
-      setUsage(data.usage)
+      setUsage(data.usage || {})
     } catch (error) {
       console.error("Error fetching usage:", error)
     }
