@@ -747,7 +747,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
             <TabsContent className="mt-4 space-y-4" value="account">
               <div className="space-y-4">
                 <div className="flex flex-col space-y-1">
-                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 mb-4">
                     <Label>Your current plan is: PixelVerseAI <span className="bg-blue-500 text-white rounded-full px-2 py-1">{profile?.tier || "TIER UNAVALIABLE"}</span></Label>
                   </div>
                   <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={() => window.open('https://billing.stripe.com/p/login/eVaaIGaJX5ox5BC7ss', '_blank')}>Manage Subscription</button>
