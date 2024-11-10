@@ -1,5 +1,10 @@
 // lib/tier-limits.ts
-export const TIER_LIMITS = {
+export type TierName = "FREE" | "EXPLORE" | "PLUS" | "MAX"
+
+export const TIER_LIMITS: Record<TierName, {
+  [key: string]: number
+  messages_per_day: number
+}> = {
     FREE: {
       "gpt-4o-mini": 5,
       "gpt-4o": 5,
