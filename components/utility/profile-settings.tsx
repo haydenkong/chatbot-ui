@@ -11,6 +11,7 @@ import { uploadProfileImage } from "@/db/storage/profile-images"
 import { exportLocalStorageAsJSON } from "@/lib/export-old-data"
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models"
 import { LLM_LIST_MAP } from "@/lib/models/llm/llm-list"
+const [usage, setUsage] = useState<Record<string, number>>({});
 import { supabase } from "@/lib/supabase/browser-client"
 import { cn } from "@/lib/utils"
 import { OpenRouterLLM } from "@/types"
@@ -782,9 +783,9 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   <div>Loading usage...</div>
                 ) : (
                   <div className="space-y-2">
-                    {Object.entries(tierLimits).map(([model, limit]) => {
-                      if (model === "messages_per_day") return null
-                      const used = usage[model] || 0
+                    {Object.entries(tierLimits || {}).map(([model, limit]) => {
+                      if (model === "messages_per_day") return null;
+                      const used = (usage || {})[model] || 0;
                       return (
                         <div key={model} className="flex justify-between items-center">
                           <span>{model}:</span>
@@ -793,22 +794,20 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                           </span>
                           <div className={cn(
                             "text-sm font-medium",
+                            limit === -1 ? "" :
                             used/limit >= 0.9 ? "text-red-500" : 
                             used/limit >= 0.7 ? "text-yellow-500" : 
                             "text-green-500"
-                            )}>
-                            {limit === -1 ? (
-                              "Unlimited"
-                            ) : (
-                              `${Math.round((used / limit) * 100)}%`
-                            )}
+                          )}>
+                            {limit === -1 ? "Unlimited" : `${Math.round((used / limit) * 100)}%`}
                           </div>
                         </div>
-                      )
+                      );
                     })}
+
                     <div className="text-sm text-muted-foreground">
-                      Total Messages: {Object.values(usage).reduce((a, b) => a + b, 0)} / 
-                      {tierLimits.messages_per_day === -1 ? "∞" : tierLimits.messages_per_day}
+                      Total Messages: {Object.values(usage || {}).reduce((a, b) => a + b, 0)} / 
+                      {tierLimits?.messages_per_day === -1 ? "∞" : tierLimits?.messages_per_day || 0}
                     </div>
                   </div>
                 )}
