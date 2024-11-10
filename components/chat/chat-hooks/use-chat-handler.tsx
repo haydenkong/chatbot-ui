@@ -192,7 +192,7 @@ export const useChatHandler = () => {
   }
 
   const isTierName = (tier: string): tier is TierName => {
-    return ['FREE', 'EXPLORE', 'PLUS', 'MAX'].includes(tier as TierName)
+    return ["FREE", "EXPLORE", "PLUS", "MAX"].includes(tier as TierName)
   }
 
   const checkMessageLimits = async (model: string) => {
@@ -200,36 +200,41 @@ export const useChatHandler = () => {
       toast.error("No profile found")
       return false
     }
-
+  
     const today = new Date()
     today.setUTCHours(0, 0, 0, 0)
-
+  
     const { data: messages, error } = await supabase
       .from("messages")
       .select("model")
       .eq("user_id", profile.user_id)
       .gte("created_at", today.toISOString())
-
+  
     if (error) {
       toast.error("Failed to check message limits")
       return false
     }
-
-    const tier = isTierName(profile.tier) ? profile.tier : "FREE"
+  
+    // Ensure profileTier is a string
+    const profileTier = profile.tier || "FREE"
+    const tier = isTierName(profileTier) ? profileTier : "FREE"
     const tierLimits = TIER_LIMITS[tier]
     const modelCount = messages?.filter(m => m.model === model).length || 0
     const totalCount = messages?.length || 0
-
+  
     if (tierLimits[model] !== -1 && modelCount >= tierLimits[model]) {
       toast.error(`Daily limit reached for ${model}`)
       return false
     }
-
-    if (tierLimits.messages_per_day !== -1 && totalCount >= tierLimits.messages_per_day) {
+  
+    if (
+      tierLimits.messages_per_day !== -1 &&
+      totalCount >= tierLimits.messages_per_day
+    ) {
       toast.error("Daily message limit reached")
       return false
     }
-
+  
     return true
   }
 
