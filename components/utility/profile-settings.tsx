@@ -791,10 +791,18 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                           <span>
                             {used} / {limit === -1 ? "∞" : limit}
                           </span>
-                          <Progress 
-                            value={limit === -1 ? 0 : (used / limit) * 100} 
-                            className="w-1/3"
-                          />
+                          <div className={cn(
+                            "text-sm font-medium",
+                            used/limit >= 0.9 ? "text-red-500" : 
+                            used/limit >= 0.7 ? "text-yellow-500" : 
+                            "text-green-500"
+                            )}>
+                            {limit === -1 ? (
+                              "Unlimited"
+                            ) : (
+                              `${Math.round((used / limit) * 100)}%`
+                            )}
+                          </div>
                         </div>
                       )
                     })}
