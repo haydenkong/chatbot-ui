@@ -7,8 +7,8 @@ export const checkMessageLimits = async (
   tier: string, // Keep as string for compatibility
   model: string
 ) => {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
 
   const { data: messages } = await supabase
     .from("messages")

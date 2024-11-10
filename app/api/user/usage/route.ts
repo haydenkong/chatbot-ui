@@ -5,8 +5,8 @@ import { supabase } from "@/lib/supabase/browser-client"
 export async function GET(request: Request) {
   try {
     const profile = await getServerProfile()
-    const today = new Date()
-    today.setUTCHours(0, 0, 0, 0)
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
 
     console.log("Profile:", profile)
     console.log("UTC Date used:", today.toISOString())
