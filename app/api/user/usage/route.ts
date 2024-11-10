@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     )
 
     console.log("Profile:", profile)
-    console.log("UTC Date used:", today.toISOString())
+    console.log("UTC Date used:", midnight.toISOString())
 
     const { data: messages, error } = await supabase
       .from("messages")
