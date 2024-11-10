@@ -6,7 +6,7 @@ import {
   PROFILE_USERNAME_MIN
 } from "@/db/limits"
 import { updateProfile } from "@/db/profile"
-import { TIER_LIMITS } from "@/lib/tier-limits"
+import { TIER_LIMITS, TierName } from "@/lib/tier-limits"
 import { uploadProfileImage } from "@/db/storage/profile-images"
 import { exportLocalStorageAsJSON } from "@/lib/export-old-data"
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models"
@@ -138,7 +138,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
     fetchUsage()
   }, [])
 
-  const tierLimits = TIER_LIMITS[profile?.tier || "FREE"]
+  const tierLimits = TIER_LIMITS[(profile?.tier as TierName) || "FREE"]
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
