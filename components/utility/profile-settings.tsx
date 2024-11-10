@@ -776,7 +776,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   <Label className="text-sm text-gray-500 text-center"><a href="https://ai.pixelverse.tech/assets/policies/PXVSITD809.pdf">PixelVerse Chats Policy</a></Label>
                 </div>
               </div>
-              {/* <div className="mt-6 space-y-4">
+              <div className="mt-6 space-y-4">
                 <Label>Your Usage Today</Label>
                 {loading ? (
                   <div>Loading usage...</div>
@@ -810,7 +810,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                     </div>
                   </div>
                 )}
-              </div> */}
+              </div>
             </TabsContent>
 
 
