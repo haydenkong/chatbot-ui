@@ -10,7 +10,7 @@ import { Tables } from "@/supabase/types"
 import { ChatMessage, ChatPayload, LLMID, ModelProvider } from "@/types"
 import { useRouter } from "next/navigation"
 import { useContext, useEffect, useRef } from "react"
-import { TIER_LIMITS } from "@/lib/tier-limits"
+import { TIER_LIMITS, TierName } from "@/lib/tier-limits"
 import { LLM_LIST } from "../../../lib/models/llm/llm-list"
 import {
   createTempMessages,
@@ -191,6 +191,10 @@ export const useChatHandler = () => {
     }
   }
 
+  const isTierName = (tier: string): tier is TierName => {
+    return ['FREE', 'EXPLORE', 'PLUS', 'MAX'].includes(tier as TierName)
+  }
+
   const checkMessageLimits = async (model: string) => {
     if (!profile) {
       toast.error("No profile found")
@@ -211,7 +215,8 @@ export const useChatHandler = () => {
       return false
     }
 
-    const tierLimits = TIER_LIMITS[profile.tier || "FREE"]
+    const tier = isTierName(profile.tier) ? profile.tier : "FREE"
+    const tierLimits = TIER_LIMITS[tier]
     const modelCount = messages?.filter(m => m.model === model).length || 0
     const totalCount = messages?.length || 0
 
