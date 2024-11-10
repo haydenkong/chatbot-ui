@@ -10,7 +10,8 @@ import { Tables } from "@/supabase/types"
 import { ChatMessage, ChatPayload, LLMID, ModelProvider } from "@/types"
 import { useRouter } from "next/navigation"
 import { useContext, useEffect, useRef } from "react"
-import { TIER_LIMITS, TierName } from "@/lib/tier-limits"
+import { checkMessageLimits } from "@/lib/chat-helpers/check-limits"
+import { toast } from "sonner"
 import { LLM_LIST } from "../../../lib/models/llm/llm-list"
 import {
   createTempMessages,
@@ -22,8 +23,6 @@ import {
   processResponse,
   validateChatSettings
 } from "../chat-helpers"
-import { supabase } from "@/lib/supabase/browser-client"
-import { toast } from "sonner"
 
 export const useChatHandler = () => {
   const router = useRouter()
@@ -191,53 +190,6 @@ export const useChatHandler = () => {
     }
   }
 
-  const isTierName = (tier: string): tier is TierName => {
-    return ["FREE", "EXPLORE", "PLUS", "MAX"].includes(tier as TierName)
-  }
-
-  const checkMessageLimits = async (model: string) => {
-    if (!profile) {
-      toast.error("No profile found")
-      return false
-    }
-  
-    const today = new Date()
-    today.setUTCHours(0, 0, 0, 0)
-  
-    const { data: messages, error } = await supabase
-      .from("messages")
-      .select("model")
-      .eq("user_id", profile.user_id)
-      .gte("created_at", today.toISOString())
-  
-    if (error) {
-      toast.error("Failed to check message limits")
-      return false
-    }
-  
-    // Ensure profileTier is a string
-    const profileTier = profile.tier || "FREE"
-    const tier = isTierName(profileTier) ? profileTier : "FREE"
-    const tierLimits = TIER_LIMITS[tier]
-    const modelCount = messages?.filter(m => m.model === model).length || 0
-    const totalCount = messages?.length || 0
-  
-    if (tierLimits[model] !== -1 && modelCount >= tierLimits[model]) {
-      toast.error(`Daily limit reached for ${model}`)
-      return false
-    }
-  
-    if (
-      tierLimits.messages_per_day !== -1 &&
-      totalCount >= tierLimits.messages_per_day
-    ) {
-      toast.error("Daily message limit reached")
-      return false
-    }
-  
-    return true
-  }
-
   const handleSendMessage = async (
     messageContent: string,
     chatMessages: ChatMessage[],
@@ -246,10 +198,19 @@ export const useChatHandler = () => {
     const startingInput = messageContent
 
     try {
-      const model = chatSettings?.model || "gpt-3.5-turbo"
-    
-      const allowed = await checkMessageLimits(model)
-      if (!allowed) return
+      // Check rate limits before proceeding
+      if (!isRegeneration && profile) {
+        const { allowed, error } = await checkMessageLimits(
+          profile.user_id,
+          profile.tier || "FREE", // Default to FREE tier if not set
+          chatSettings?.model || ""
+        )
+
+        if (!allowed) {
+          toast.error(error)
+          return
+        }
+      }
 
       setUserInput("")
       setIsGenerating(true)
@@ -439,8 +400,9 @@ export const useChatHandler = () => {
       setFirstTokenReceived(false)
     } catch (error) {
       setIsGenerating(false)
-      setFirstTokenReceived(false)
+      setFirstTokenReceived(false) 
       setUserInput(startingInput)
+      toast.error("Error sending message: " + (error as Error).message)
     }
   }
 
