@@ -1,10 +1,10 @@
 // lib/chat-helpers/check-limits.ts
-import { TIER_LIMITS } from "@/lib/tier-limits"
+import { TIER_LIMITS, TierName } from "@/lib/tier-limits"
 import { supabase } from "@/lib/supabase/browser-client"
 
 export const checkMessageLimits = async (
   userId: string,
-  tier: string,
+  tier: string, // Keep as string for compatibility
   model: string
 ) => {
   const today = new Date()
@@ -18,7 +18,12 @@ export const checkMessageLimits = async (
 
   if (!messages) return { allowed: false, error: "Could not check limits" }
 
-  const tierLimits = TIER_LIMITS[tier]
+  // Validate tier is a valid TierName
+  if (!Object.keys(TIER_LIMITS).includes(tier)) {
+    return { allowed: false, error: "Invalid tier" }
+  }
+
+  const tierLimits = TIER_LIMITS[tier as TierName]
   const modelLimit = tierLimits[model]
   const dailyLimit = tierLimits.messages_per_day
 
