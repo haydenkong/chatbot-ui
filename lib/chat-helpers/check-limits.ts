@@ -1,36 +1,27 @@
 // lib/chat-helpers/check-limits.ts
-import { TIER_LIMITS, TierName } from "@/lib/tier-limits"
-import { supabase } from "@/lib/supabase/browser-client"
+import { TIER_LIMITS, TierName } from "@/lib/tier-limits";
+import { supabase } from "@/lib/supabase/browser-client";
 
 export const checkMessageLimits = async (
   userId: string,
-  tier: string, // Keep as string for compatibility
+  tier: string,
   model: string
 ) => {
-  const now = new Date()
-  const userTimezoneOffset = now.getTimezoneOffset() * 60000 // Convert minutes to milliseconds
-
-  // Create local midnight
-  const localMidnight = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
+  const now = new Date();
+  const midnightUTC = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
     0, 0, 0, 0
-  )
-
-  // Convert local midnight to UTC by adding the timezone offset
-  const utcMidnight = new Date(localMidnight.getTime() + userTimezoneOffset)
-
-  console.log("Local midnight:", localMidnight.toLocaleString())
-  console.log("UTC Date used:", utcMidnight.toISOString())
+  ));
 
   const { data: messages } = await supabase
     .from("messages")
     .select("model")
     .eq("user_id", userId)
-    .gte("created_at", utcMidnight.toISOString())
+    .gte("created_at", midnightUTC.toISOString());
 
-  if (!messages) return { allowed: false, error: "Could not check limits" }
+  if (!messages) return { allowed: false, error: "Could not check limits" };
 
   // Validate tier is a valid TierName
   if (!Object.keys(TIER_LIMITS).includes(tier)) {
