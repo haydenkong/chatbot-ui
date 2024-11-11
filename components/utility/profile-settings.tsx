@@ -360,7 +360,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
             <TabsList className="mt-4 grid w-full grid-cols-2">
               <TabsTrigger value="profile">Profile</TabsTrigger>
               {/* <TabsTrigger value="keys">API Keys</TabsTrigger> */}
-              <TabsTrigger value="account">Account</TabsTrigger>
+              <TabsTrigger value="account">Plan</TabsTrigger>
             </TabsList>
 
             <TabsContent className="mt-4 space-y-4" value="profile">
