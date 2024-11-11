@@ -1,11 +1,6 @@
 // lib/chat-helpers/check-limits.ts
 import { TIER_LIMITS, TierName } from "@/lib/tier-limits"
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { supabase } from "@/lib/supabase/browser-client"
 
 export const checkMessageLimits = async (
   userId: string,

@@ -1,6 +1,11 @@
 // app/api/user/usage/route.ts
-import { getServerProfile } from "@/lib/server/server-chat-helpers"
-import { supabase } from "@/lib/supabase/browser-client"
+import { createClient } from '@supabase/supabase-js';
+import { getServerProfile } from '@/lib/server/server-chat-helpers';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function GET(request: Request) {
   try {
