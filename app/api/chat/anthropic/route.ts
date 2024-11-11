@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const response = await anthropic.messages.create({
-        model: chatSettings.model,
+        model: chatSettings.model === 'claude-3-opus-20240229' ? 'claude-3-5-sonnet-20240620' : chatSettings.model,
         messages: ANTHROPIC_FORMATTED_MESSAGES,
         temperature: chatSettings.temperature,
         system: messages[0].content,

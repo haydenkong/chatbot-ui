@@ -802,32 +802,44 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   <div>Loading usage...</div>
                 ) : (
                   <div className="space-y-2">
-                    {Object.entries(tierLimits || {}).map(([model, limit]) => {
-                      if (model === "messages_per_day") return null;
-                      const used = (usage || {})[model] || 0;
-                      return (
-                        <div key={model} className="flex justify-between items-center">
-                          <span>{model}:</span>
-                          <span>
-                            {used} / {limit === -1 ? "∞" : limit}
-                          </span>
-                          <div className={cn(
-                            "text-sm font-medium",
-                            limit === -1 ? "" :
-                            used/limit >= 0.9 ? "text-red-500" : 
-                            used/limit >= 0.7 ? "text-yellow-500" : 
-                            "text-green-500"
-                          )}>
-                            {limit === -1 ? "Unlimited" : `${Math.round((used / limit) * 100)}%`}
-                          </div>
-                        </div>
-                      );
-                    })}
+                  {Object.entries(tierLimits || {}).map(([model, limit]) => {
+                    if (model === "messages_per_day") return null;
+                    const used = (usage || {})[model] || 0;
+                    const usagePercentage = limit === -1 ? 0 : (used / limit) * 100;
+                    
+                    if (usagePercentage >= 80) {
+                    return (
+                      <div key={model} className="p-2 rounded-md bg-yellow-100 dark:bg-yellow-900">
+                      <span className="text-yellow-800 dark:text-yellow-200">
+                        Warning: {model} usage is at {Math.round(usagePercentage)}%
+                      </span>
+                      </div>
+                    );
+                    }
+                    return null;
+                  })}
 
-                    <div className="text-sm text-muted-foreground">
-                      Total Messages: {Object.values(usage || {}).reduce((a, b) => a + b, 0)} / 
-                      {tierLimits?.messages_per_day === -1 ? "∞" : tierLimits?.messages_per_day || 0}
+                  {/* Only show total messages warning if above 80% */}
+                  {tierLimits?.messages_per_day !== -1 && 
+                   (Object.values(usage || {}).reduce((a, b) => a + b, 0) / tierLimits?.messages_per_day) >= 0.8 && (
+                    <div className="p-2 rounded-md bg-yellow-100 dark:bg-yellow-900">
+                    <span className="text-yellow-800 dark:text-yellow-200">
+                      Warning: You are approaching your daily message limit
+                    </span>
                     </div>
+                  )}
+
+                  {/* Show "all good" message if no warnings */}
+                  {!Object.entries(tierLimits || {}).some(([model, limit]) => {
+                    const used = (usage || {})[model] || 0;
+                    return limit !== -1 && (used / limit) >= 0.8;
+                  }) && (
+                    <div className="p-2 rounded-md bg-green-100 dark:bg-green-900">
+                    <span className="text-green-800 dark:text-green-200">
+                      Usage is within normal limits
+                    </span>
+                    </div>
+                  )}
                   </div>
                 )}
               </div>
