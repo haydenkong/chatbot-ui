@@ -783,14 +783,20 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
               <div className="mt-6 space-y-4">
                 <Label>Your Usage Today</Label>
                 <div className="mb-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-                    <div className="space-y-2">
-                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                      This usage system is newly implemented, in beta and subject to change. Usage resets daily at midnight UTC.
-                    </p>
-                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                      These limits are in place to prevent spam and ensure fair usage for all users.
-                    </p>
-                    </div>
+                  <div className="space-y-2">
+                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                    This usage system is newly implemented, in beta and subject to change. Usage resets daily at midnight UTC.
+                  </p>
+                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                    These limits are in place to prevent spam and ensure fair usage for all users.
+                  </p>
+                  <button 
+                    onClick={() => window.open('https://pixelverse.fillout.com/t/uihmbUBUmXus', '_blank')}
+                    className="mt-2 px-4 py-2 text-sm bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 rounded hover:opacity-80"
+                  >
+                    Give Feedback
+                  </button>
+                  </div>
                 </div>
                 {loading ? (
                   <div>Loading usage...</div>
