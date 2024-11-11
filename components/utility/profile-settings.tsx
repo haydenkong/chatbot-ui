@@ -361,10 +361,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
               <TabsTrigger value="profile">Profile</TabsTrigger>
               {/* <TabsTrigger value="keys">API Keys</TabsTrigger> */}
               <TabsTrigger value="account">Plan</TabsTrigger>
-              {/* Hide usage tab for specific users */}
-              {!['c7e417b2-4e7f-4a00-a659-d6c79763ea66', '37f0d316-6554-46b8-97a9-36a1d9a0e008', 'dfa35afd-8240-4a61-9854-272fedc30fe7'].includes(profile?.id || '') && (
               <TabsTrigger value="usage">Usage</TabsTrigger>
-              )}
             </TabsList>
 
             <TabsContent className="mt-4 space-y-4" value="profile">
