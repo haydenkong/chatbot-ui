@@ -357,11 +357,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
           </SheetHeader>
 
           <Tabs defaultValue="profile">
-            <TabsList className="mt-4 grid w-full" style={{
-              gridTemplateColumns: ['c7e417b2-4e7f-4a00-a659-d6c79763ea66', '37f0d316-6554-46b8-97a9-36a1d9a0e008', 'dfa35afd-8240-4a61-9854-272fedc30fe7'].includes(profile?.id || '') 
-              ? 'repeat(2, minmax(0, 1fr))' 
-              : 'repeat(3, minmax(0, 1fr))'
-            }}>
+            <TabsList className="mt-4 grid w-full grid-cols-3">
               <TabsTrigger value="profile">Profile</TabsTrigger>
               {/* <TabsTrigger value="keys">API Keys</TabsTrigger> */}
               <TabsTrigger value="account">Plan</TabsTrigger>
