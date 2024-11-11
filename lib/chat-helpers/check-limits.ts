@@ -7,19 +7,28 @@ export const checkMessageLimits = async (
   tier: string, // Keep as string for compatibility
   model: string
 ) => {
-  const today = new Date()
-  const midnight = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
+  const now = new Date()
+  const userTimezoneOffset = now.getTimezoneOffset() * 60000 // Convert minutes to milliseconds
+
+  // Create local midnight
+  const localMidnight = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
     0, 0, 0, 0
   )
+
+  // Convert local midnight to UTC by adding the timezone offset
+  const utcMidnight = new Date(localMidnight.getTime() + userTimezoneOffset)
+
+  console.log("Local midnight:", localMidnight.toLocaleString())
+  console.log("UTC Date used:", utcMidnight.toISOString())
 
   const { data: messages } = await supabase
     .from("messages")
     .select("model")
     .eq("user_id", userId)
-    .gte("created_at", midnight.toISOString())
+    .gte("created_at", utcMidnight.toISOString())
 
   if (!messages) return { allowed: false, error: "Could not check limits" }
 
