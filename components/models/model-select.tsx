@@ -97,7 +97,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       >
         {allModels.length === 0 ? (
           <div className="rounded text-sm font-bold">
-            Account Error: Please wait a few minutes, or contact support.
+            Looks like you are new! Please reload the page.
           </div>
         ) : (
           <Button

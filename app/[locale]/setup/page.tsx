@@ -146,7 +146,7 @@ export default function SetupPage() {
       case 2:
         return (
           <StepContainer
-            stepDescription="You are all set up!"
+            stepDescription="You are all set up! If you have any questions or experience any issues, please contact our dedicated support team at contact@pixelverse.tech."
             stepNum={currentStep}
             stepTitle="Setup Complete"
             onShouldProceed={handleShouldProceed}
