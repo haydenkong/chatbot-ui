@@ -357,10 +357,11 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
           </SheetHeader>
 
           <Tabs defaultValue="profile">
-            <TabsList className="mt-4 grid w-full grid-cols-2">
+            <TabsList className="mt-4 grid w-full grid-cols-3">
               <TabsTrigger value="profile">Profile</TabsTrigger>
               {/* <TabsTrigger value="keys">API Keys</TabsTrigger> */}
               <TabsTrigger value="account">Plan</TabsTrigger>
+              <TabsTrigger value="usage">Usage</TabsTrigger>
             </TabsList>
 
             <TabsContent className="mt-4 space-y-4" value="profile">
@@ -776,6 +777,9 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                   <Label className="text-sm text-gray-500 text-center"><a href="https://ai.pixelverse.tech/assets/policies/PXVSITD809.pdf">PixelVerse Chats Policy</a></Label>
                 </div>
               </div>
+            </TabsContent>
+
+            <TabsContent className="mt-4 space-y-4" value="usage">
               <div className="mt-6 space-y-4">
                 <Label>Your Usage Today</Label>
                 {loading ? (
