@@ -5,22 +5,13 @@ import { supabase } from "@/lib/supabase/browser-client";
 export async function GET(request: Request) {
   try {
     const profile = await getServerProfile();
-    const now = new Date();
-    const midnightUTC = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      0, 0, 0, 0
-    ));
 
     console.log("Profile:", profile);
-    console.log("UTC Date used:", midnightUTC.toISOString());
 
     const { data: messages, error } = await supabase
       .from("messages")
       .select("model, created_at")
-      .eq("user_id", profile.user_id)
-      .gte("created_at", midnightUTC.toISOString());
+      .eq("user_id", profile.user_id);
 
     console.log("Messages found:", messages?.length);
     console.log("Query error:", error);
