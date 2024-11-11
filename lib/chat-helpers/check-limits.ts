@@ -42,14 +42,14 @@ export const checkMessageLimits = async (
   if (modelLimit !== -1 && modelUsage >= modelLimit) {
     return {
       allowed: false,
-      error: `You have reached your daily limit for ${model}`
+      error: `You have reached your daily limit for ${model}. Please upgrade to a higher plan to continue using this model.`
     }
   }
 
   if (dailyLimit !== -1 && totalUsage >= dailyLimit) {
     return {
       allowed: false,
-      error: "You have reached your total daily message limit"
+      error: "You have reached your total daily message limit. Please upgrade to a higher plan to continue messaging."
     }
   }
 
