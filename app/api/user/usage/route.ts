@@ -25,6 +25,7 @@ export async function GET(request: Request) {
       .from("messages")
       .select("model, created_at")
       .eq("user_id", profile.user_id)
+      .eq("role", "assistant") // Add this line to only count assistant responses
       .gte("created_at", midnight.toISOString())
 
     console.log("Messages found:", messages?.length)

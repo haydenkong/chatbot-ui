@@ -19,6 +19,7 @@ export const checkMessageLimits = async (
     .from("messages")
     .select("model")
     .eq("user_id", userId)
+    .eq("role", "assistant") // Add this line to only count assistant responses
     .gte("created_at", midnight.toISOString())
 
   if (!messages) return { allowed: false, error: "Could not check limits" }
