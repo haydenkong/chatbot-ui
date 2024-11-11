@@ -4,31 +4,24 @@ import { supabase } from "@/lib/supabase/browser-client"
 
 export const checkMessageLimits = async (
   userId: string,
-  tier: string,
+  tier: string, // Keep as string for compatibility
   model: string
 ) => {
-  // Get user's local midnight time
-  const now = new Date();
-  const localMidnight = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
+  const today = new Date()
+  const midnight = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
     0, 0, 0, 0
-  );
+  )
 
-  // Convert local midnight to UTC
-  const midnightUTC = new Date(localMidnight.getTime() + localMidnight.getTimezoneOffset() * 60000);
+  const { data: messages } = await supabase
+    .from("messages")
+    .select("model")
+    .eq("user_id", userId)
+    .gte("created_at", midnight.toISOString())
 
-  const { data: messages, error } = await supabase
-    .from('messages')
-    .select('model')
-    .eq('user_id', userId)
-    .gte('created_at', midnightUTC.toISOString());
-
-  if (error) {
-    console.log('Query error:', error);
-    return { allowed: false, error: 'Could not check limits' };
-  }
+  if (!messages) return { allowed: false, error: "Could not check limits" }
 
   // Validate tier is a valid TierName
   if (!Object.keys(TIER_LIMITS).includes(tier)) {
