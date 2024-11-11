@@ -98,10 +98,10 @@ export const TIER_LIMITS: Record<TierName, {
       messages_per_day: 100
     },
     PLUS: {
-      "gpt-4o-mini": 25,
-      "gpt-4o": 25,
-      "gpt-4-turbo-preview": 25,
-      "gpt-4-1106-vision-preview": 25,
+      "gpt-4o-mini": 50,
+      "gpt-4o": 20,
+      "gpt-4-turbo-preview": 10,
+      "gpt-4-1106-vision-preview": 10,
       "gpt-4": 25,
       "gpt-3.5-turbo": 25,
       "gemini-pro": 25,
@@ -111,9 +111,9 @@ export const TIER_LIMITS: Record<TierName, {
       "claude-2.1": 25,
       "claude-instant-1.2": 25,
       "claude-3-haiku-20240307": 25,
-      "claude-3-sonnet-20240229": 25,
-      "claude-3-opus-20240229": 25,
-      "claude-3-5-sonnet-20240620": 25,
+      "claude-3-sonnet-20240229": 15,
+      "claude-3-opus-20240229": 15,
+      "claude-3-5-sonnet-20240620": 15,
       "mistral-tiny": 25,
       "mistral-small": 25,
       "mistral-medium": 25,
@@ -141,7 +141,7 @@ export const TIER_LIMITS: Record<TierName, {
       "sonar-small-online": 25,
       "sonar-medium-chat": 25,
       "sonar-medium-online": 25,
-      messages_per_day: 100
+      messages_per_day: 50
     },
     MAX: {
       "gpt-4o-mini": 25,
@@ -187,7 +187,7 @@ export const TIER_LIMITS: Record<TierName, {
       "sonar-small-online": 25,
       "sonar-medium-chat": 25,
       "sonar-medium-online": 25,
-      messages_per_day: 100
+      messages_per_day: 80
     }
 }
 
