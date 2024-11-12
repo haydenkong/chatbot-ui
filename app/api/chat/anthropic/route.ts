@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
         max_tokens: CHAT_SETTING_LIMITS[chatSettings.model].MAX_TOKEN_OUTPUT_LENGTH,
         stream: true
       });
-    }
+    };
 
 
       try {
