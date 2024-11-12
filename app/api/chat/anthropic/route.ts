@@ -88,13 +88,19 @@ export async function POST(request: NextRequest) {
 
     try {
       const response = await anthropic.messages.create({
-        model: chatSettings.model === 'claude-3-opus-20240229' ? 'claude-3-5-haiku-latest' : chatSettings.model,
+        model: chatSettings.model === 'claude-3-opus-20240229'
+          ? 'claude-3-5-haiku-latest'
+          : chatSettings.model === 'claude-3-5-sonnet-20240620'
+          ? 'claude-3-5-haiku-latest'
+          : chatSettings.model,
         messages: ANTHROPIC_FORMATTED_MESSAGES,
         temperature: chatSettings.temperature,
         system: messages[0].content,
         max_tokens: CHAT_SETTING_LIMITS[chatSettings.model].MAX_TOKEN_OUTPUT_LENGTH,
         stream: true
-      })
+      });
+    }
+
 
       try {
         const stream = AnthropicStream(response)
