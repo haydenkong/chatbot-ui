@@ -85,14 +85,14 @@ export const incrementModelUsage = async (userId: string, model: string) => {
       .from('profiles')
       .update({ 
         daily_usage: { [today]: { [model]: 1 } },
-        usage_reset_date: new Date().toISOString() // Convert to ISO string
+        usage_reset_date: new Date().toISOString()
       })
       .eq('user_id', userId);
     return;
   }
 
   // Increment usage for model
-  const usage = profile.daily_usage[today] || {};
+  const usage = profile?.daily_usage?.[today] ?? {};
   usage[model] = (usage[model] || 0) + 1;
 
   await supabase
