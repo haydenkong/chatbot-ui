@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/browser-client"
-import { TablesInsert, TablesUpdate } from "@/supabase/types"
+import { ProfileUsage, Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
 // Add types for new fields
 interface ProfileUsage {
