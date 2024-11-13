@@ -97,15 +97,23 @@ export async function POST(request: NextRequest) {
         stream: true
       })
 
-
       try {
         const stream = AnthropicStream(response)
-        return new StreamingTextResponse(stream)
+        // Clone the stream so we can have multiple readers
+        const [stream1, stream2] = stream.tee()
+        
+        return new StreamingTextResponse(stream1, {
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+          },
+        })
       } catch (error: any) {
-        console.error("Error parsing Anthropic API response:", error)
+        console.error("Streaming error:", error)
         return new NextResponse(
-          JSON.stringify({
-            message: "An error occurred while parsing the Anthropic API response"
+          JSON.stringify({ 
+            message: "Error establishing stream connection" 
           }),
           { status: 500 }
         )
