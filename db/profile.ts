@@ -1,6 +1,12 @@
 import { supabase } from "@/lib/supabase/browser-client"
 import { ProfileUsage, Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 
+// Add types for new fields
+interface ProfileUsage {
+  [date: string]: {
+    [model: string]: number
+  }
+}
 
 export const getProfileByUserId = async (userId: string) => {
   const { data: profile, error } = await supabase
