@@ -439,7 +439,10 @@ export const useChatHandler = () => {
     )
 
     setChatMessages(filteredMessages)
-
+  
+    // Track usage for edited/regenerated messages
+    await incrementModelUsage(profile.user_id, chatSettings.model)
+  
     // Send edited message (will track usage in handleSendMessage)
     await handleSendMessage(editedContent, filteredMessages, false)
   }
