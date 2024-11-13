@@ -1163,6 +1163,8 @@ export interface Database {
           user_id: string
           username: string
           tier: string | null
+          usage_reset_date: string | null
+          daily_usage: Json
         }
         Insert: {
           anthropic_api_key?: string | null
@@ -1192,6 +1194,8 @@ export interface Database {
           user_id: string
           username: string
           tier?: string | null
+          usage_reset_date?: string | null
+          daily_usage?: Json
         }
         Update: {
           anthropic_api_key?: string | null
@@ -1221,6 +1225,8 @@ export interface Database {
           user_id?: string
           username?: string
           tier?: string | null
+          usage_reset_date?: string | null
+          daily_usage?: Json
         }
         Relationships: [
           {
