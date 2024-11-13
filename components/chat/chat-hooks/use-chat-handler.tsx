@@ -13,6 +13,7 @@ import { useContext, useEffect, useRef } from "react"
 import { checkMessageLimits } from "@/lib/chat-helpers/check-limits"
 import { toast } from "sonner"
 import { LLM_LIST } from "../../../lib/models/llm/llm-list"
+import { incrementModelUsage } from "@/db/profiles"
 import {
   createTempMessages,
   handleCreateChat,
@@ -322,6 +323,11 @@ export const useChatHandler = () => {
           setChatMessages,
           setToolInUse
         )
+
+        // Add usage tracking after successful API call
+        if (profile && chatSettings?.model) {
+          await incrementModelUsage(profile.user_id, chatSettings.model)
+        }
       } else {
         if (modelData!.provider === "ollama") {
           generatedText = await handleLocalChat(
@@ -336,6 +342,11 @@ export const useChatHandler = () => {
             setChatMessages,
             setToolInUse
           )
+
+          // Add usage tracking
+          if (profile && chatSettings?.model) {
+            await incrementModelUsage(profile.user_id, chatSettings.model)
+          }
         } else {
           generatedText = await handleHostedChat(
             payload,
@@ -351,6 +362,11 @@ export const useChatHandler = () => {
             setChatMessages,
             setToolInUse
           )
+
+          // Add usage tracking
+          if (profile && chatSettings?.model) {
+            await incrementModelUsage(profile.user_id, chatSettings.model)
+          }
         }
       }
 
@@ -410,7 +426,7 @@ export const useChatHandler = () => {
     editedContent: string,
     sequenceNumber: number
   ) => {
-    if (!selectedChat) return
+    if (!selectedChat || !profile || !chatSettings?.model) return
 
     await deleteMessagesIncludingAndAfter(
       selectedChat.user_id,
@@ -424,7 +440,8 @@ export const useChatHandler = () => {
 
     setChatMessages(filteredMessages)
 
-    handleSendMessage(editedContent, filteredMessages, false)
+    // Send edited message (will track usage in handleSendMessage)
+    await handleSendMessage(editedContent, filteredMessages, false)
   }
 
   return {
