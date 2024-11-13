@@ -90,21 +90,17 @@ export const incrementModelUsage = async (userId: string, model: string) => {
     throw new Error(`Failed to fetch profile: ${fetchError.message}`);
   }
 
-  const updateData: TablesUpdate<"profiles"> = {
-    daily_usage: {},
-    usage_reset_date: new Date().toISOString()
-  };
-
-  // Reset usage if it's a new day
+  // Reset usage if it's a new day but preserve history
   if (!profile?.usage_reset_date || new Date(profile.usage_reset_date).toISOString().split('T')[0] !== today) {
-    updateData.daily_usage = {
-      ...profile?.daily_usage,
-      [today]: { [model]: 1 }
-    };
-
     const { error: resetError } = await supabase
       .from('profiles')
-      .update(updateData)
+      .update({ 
+        daily_usage: { 
+          ...profile?.daily_usage,
+          [today]: { [model]: 1 } 
+        },
+        usage_reset_date: new Date().toISOString()
+      })
       .eq('user_id', userId);
 
     if (resetError) {
@@ -113,10 +109,10 @@ export const incrementModelUsage = async (userId: string, model: string) => {
     return;
   }
 
-  // Update existing usage
-  const currentUsage: ProfileUsage = profile.daily_usage || {};
+  // Use existing daily usage or initialize new
+  const currentUsage = profile.daily_usage || {};
   const todayUsage = currentUsage[today] || {};
-  updateData.daily_usage = {
+  const newUsage = {
     ...currentUsage,
     [today]: {
       ...todayUsage,
@@ -126,10 +122,27 @@ export const incrementModelUsage = async (userId: string, model: string) => {
 
   const { error: updateError } = await supabase
     .from('profiles')
-    .update(updateData)
+    .update({ daily_usage: newUsage })
     .eq('user_id', userId);
 
   if (updateError) {
     throw new Error(`Failed to update usage: ${updateError.message}`);
   }
+}
+
+// Add helper function to get usage
+export const getDailyUsage = async (userId: string) => {
+  const today = new Date().toISOString().split('T')[0];
+  
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('daily_usage')
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to fetch usage: ${error.message}`);
+  }
+
+  return profile.daily_usage?.[today] || {};
 }
