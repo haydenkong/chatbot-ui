@@ -69,36 +69,3 @@ export const deleteProfile = async (profileId: string) => {
 
   return true
 }
-
-export const incrementModelUsage = async (userId: string, model: string) => {
-  const today = new Date().toISOString().split('T')[0];
-  
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('daily_usage, usage_reset_date')
-    .eq('user_id', userId)
-    .single();
-
-  // Reset usage if it's a new day
-  if (!profile?.usage_reset_date || new Date(profile.usage_reset_date).toISOString().split('T')[0] !== today) {
-    await supabase
-      .from('profiles')
-      .update({ 
-        daily_usage: { [today]: { [model]: 1 } },
-        usage_reset_date: new Date()
-      })
-      .eq('user_id', userId);
-    return;
-  }
-
-  // Increment usage for model
-  const usage = profile.daily_usage[today] || {};
-  usage[model] = (usage[model] || 0) + 1;
-
-  await supabase
-    .from('profiles')
-    .update({ 
-      daily_usage: { [today]: usage }
-    })
-    .eq('user_id', userId);
-}

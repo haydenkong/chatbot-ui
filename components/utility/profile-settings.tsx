@@ -781,88 +781,65 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
 
             <TabsContent className="mt-4 space-y-4" value="usage">
               <div className="mt-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label>Daily Usage Statistics</Label>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    onClick={fetchUsage}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <IconLoader2 className="animate-spin mr-2" size={18} />
-                    ) : (
-                      "Refresh"
-                    )}
-                  </Button>
-                </div>
-
+                <Label>Your Usage Today</Label>
                 <div className="mb-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
                   <div className="space-y-2">
-                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                      Usage resets daily at midnight UTC. These limits help ensure fair usage for all users.
-                    </p>
+                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                    This usage system is newly implemented, in beta and subject to change. Usage resets daily at midnight UTC.
+                  </p>
+                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                    These limits are in place to prevent spam and ensure fair usage for all users.
+                  </p>
+                  <button 
+                    onClick={() => window.open('https://pixelverse.fillout.com/t/uihmbUBUmXus', '_blank')}
+                    className="mt-2 px-4 py-2 text-sm bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 rounded hover:opacity-80"
+                  >
+                    Give Feedback
+                  </button>
                   </div>
                 </div>
-
                 {loading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <IconLoader2 className="animate-spin" size={24} />
-                  </div>
+                  <div>Loading usage...</div>
                 ) : (
-                  <div className="space-y-4">
-                    {Object.entries(tierLimits || {}).map(([model, limit]) => {
-                      if (model === "messages_per_day") return null;
-                      const used = (usage || {})[model] || 0;
-                      const remaining = limit === -1 ? "∞" : limit - used;
-                      const usagePercentage = limit === -1 ? 0 : (used / limit) * 100;
-
-                      return (
-                        <div key={model} className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span>{model}</span>
-                            <span>
-                              {used} / {limit === -1 ? "∞" : limit} messages
-                            </span>
-                          </div>
-
-                          {limit !== -1 && (
-                            <div className="h-2 rounded-full bg-secondary">
-                              <div
-                                className={cn(
-                                  "h-full rounded-full transition-all",
-                                  usagePercentage >= 90
-                                    ? "bg-red-500"
-                                    : usagePercentage >= 75
-                                    ? "bg-yellow-500"
-                                    : "bg-green-500"
-                                )}
-                                style={{ width: `${Math.min(usagePercentage, 100)}%` }}
-                              />
-                            </div>
-                          )}
-
-                          {usagePercentage >= 90 && (
-                            <p className="text-xs text-red-500">
-                              Warning: Approaching daily limit
-                            </p>
-                          )}
-                        </div>
-                      );
-                    })}
-
-                    <div className="mt-4 pt-4 border-t">
-                      <div className="flex justify-between text-sm">
-                        <span>Total Messages Today</span>
-                        <span>
-                          {Object.values(usage).reduce((a, b) => a + b, 0)} / {
-                            tierLimits?.messages_per_day === -1 
-                              ? "∞" 
-                              : tierLimits?.messages_per_day
-                          }
-                        </span>
+                  <div className="space-y-2">
+                  {Object.entries(tierLimits || {}).map(([model, limit]) => {
+                    if (model === "messages_per_day") return null;
+                    const used = (usage || {})[model] || 0;
+                    const usagePercentage = limit === -1 ? 0 : (used / limit) * 100;
+                    
+                    if (usagePercentage >= 80) {
+                    return (
+                      <div key={model} className="p-2 rounded-md bg-yellow-100 dark:bg-yellow-900">
+                      <span className="text-yellow-800 dark:text-yellow-200">
+                        Warning: {model} usage is at {Math.round(usagePercentage)}%
+                      </span>
                       </div>
+                    );
+                    }
+                    return null;
+                  })}
+
+                  {/* Only show total messages warning if above 80% */}
+                  {tierLimits?.messages_per_day !== -1 && 
+                   (Object.values(usage || {}).reduce((a, b) => a + b, 0) / tierLimits?.messages_per_day) >= 0.8 && (
+                    <div className="p-2 rounded-md bg-yellow-100 dark:bg-yellow-900">
+                    <span className="text-yellow-800 dark:text-yellow-200">
+                      Warning: You are approaching your daily message limit
+                    </span>
                     </div>
+                  )}
+
+                  {/* Show "all good" message if no warnings */}
+                  {!Object.entries(tierLimits || {}).some(([model, limit]) => {
+                    const used = (usage || {})[model] || 0;
+                    return limit !== -1 && (used / limit) >= 0.8;
+                  }) && (
+                    <div className="p-2 rounded-md bg-green-100 dark:bg-green-900">
+                    <span className="text-green-800 dark:text-green-200">
+                      Usage is within normal limits
+                    </span>
+                    </div>
+                  )}
                   </div>
                 )}
               </div>
