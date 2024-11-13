@@ -85,7 +85,7 @@ export const incrementModelUsage = async (userId: string, model: string) => {
       .from('profiles')
       .update({ 
         daily_usage: { [today]: { [model]: 1 } },
-        usage_reset_date: new Date()
+        usage_reset_date: new Date().toISOString() // Convert to ISO string
       })
       .eq('user_id', userId);
     return;
