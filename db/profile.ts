@@ -78,49 +78,71 @@ export const deleteProfile = async (profileId: string) => {
 }
 
 export const incrementModelUsage = async (userId: string, model: string) => {
-  const today = new Date().toISOString().split('T')[0]
+  const today = new Date().toISOString().split('T')[0];
   
   const { data: profile, error: fetchError } = await supabase
     .from('profiles')
     .select('daily_usage, usage_reset_date')
     .eq('user_id', userId)
-    .single()
+    .single();
 
   if (fetchError) {
-    console.error("Error fetching profile:", fetchError)
-    throw fetchError
+    throw new Error(`Failed to fetch profile: ${fetchError.message}`);
   }
 
-  // Reset usage if it's a new day
+  // Reset usage if it's a new day but preserve history
   if (!profile?.usage_reset_date || new Date(profile.usage_reset_date).toISOString().split('T')[0] !== today) {
-    const { error } = await supabase
+    const { error: resetError } = await supabase
       .from('profiles')
       .update({ 
-        daily_usage: { [today]: { [model]: 1 } },
+        daily_usage: { 
+          ...profile?.daily_usage,
+          [today]: { [model]: 1 } 
+        },
         usage_reset_date: new Date().toISOString()
       })
-      .eq('user_id', userId)
+      .eq('user_id', userId);
 
-    if (error) {
-      console.error("Error resetting usage:", error)
-      throw error
+    if (resetError) {
+      throw new Error(`Failed to reset usage: ${resetError.message}`);
     }
-    return
+    return;
   }
 
-  // Update existing usage
-  const usage = profile.daily_usage[today] || {}
-  usage[model] = (usage[model] || 0) + 1
+  // Use existing daily usage or initialize new
+  const currentUsage = profile.daily_usage || {};
+  const todayUsage = currentUsage[today] || {};
+  const newUsage = {
+    ...currentUsage,
+    [today]: {
+      ...todayUsage,
+      [model]: (todayUsage[model] || 0) + 1
+    }
+  };
 
   const { error: updateError } = await supabase
     .from('profiles')
-    .update({ 
-      daily_usage: { ...profile.daily_usage, [today]: usage }
-    })
-    .eq('user_id', userId)
+    .update({ daily_usage: newUsage })
+    .eq('user_id', userId);
 
   if (updateError) {
-    console.error("Error updating usage:", updateError)
-    throw updateError
+    throw new Error(`Failed to update usage: ${updateError.message}`);
   }
+}
+
+// Add helper function to get usage
+export const getDailyUsage = async (userId: string) => {
+  const today = new Date().toISOString().split('T')[0];
+  
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('daily_usage')
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to fetch usage: ${error.message}`);
+  }
+
+  return profile.daily_usage?.[today] || {};
 }

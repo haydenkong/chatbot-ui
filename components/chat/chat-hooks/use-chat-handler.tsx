@@ -13,7 +13,7 @@ import { useContext, useEffect, useRef } from "react"
 import { checkMessageLimits } from "@/lib/chat-helpers/check-limits"
 import { toast } from "sonner"
 import { LLM_LIST } from "../../../lib/models/llm/llm-list"
-import { incrementModelUsage } from "@/db/profile"
+import { incrementModelUsage } from "@/db/profiles"
 import {
   createTempMessages,
   handleCreateChat,
