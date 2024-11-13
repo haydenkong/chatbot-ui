@@ -8,6 +8,16 @@ import { NextRequest, NextResponse } from "next/server"
 
 export const runtime = "edge"
 
+// Add this function to filter messages
+const filterEmptyMessages = (messages: any[]) => {
+  return messages.filter(message => {
+    if (!Array.isArray(message.content)) return true;
+    return message.content.some(content => 
+      content.type === 'text' ? content.text.trim().length > 0 : true
+    );
+  });
+};
+
 export async function POST(request: NextRequest) {
   const json = await request.json()
   const { chatSettings, messages } = json as {
@@ -22,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     let ANTHROPIC_FORMATTED_MESSAGES: any = messages.slice(1)
 
-    ANTHROPIC_FORMATTED_MESSAGES = ANTHROPIC_FORMATTED_MESSAGES?.map(
+    ANTHROPIC_FORMATTED_MESSAGES = filterEmptyMessages(ANTHROPIC_FORMATTED_MESSAGES?.map(
       (message: any) => {
         const messageContent =
           typeof message?.content === "string"
@@ -49,10 +59,12 @@ export async function POST(request: NextRequest) {
             } else {
               return content
             }
-          })
+          }).filter((content: any) => 
+            content.type === 'text' ? content.text.trim().length > 0 : true
+          )
         }
       }
-    )
+    ))
 
     // Calculate total input tokens
     const totalInputTokens = ANTHROPIC_FORMATTED_MESSAGES.reduce((acc: number, message: any) => {
@@ -97,23 +109,15 @@ export async function POST(request: NextRequest) {
         stream: true
       })
 
+
       try {
         const stream = AnthropicStream(response)
-        // Clone the stream so we can have multiple readers
-        const [stream1, stream2] = stream.tee()
-        
-        return new StreamingTextResponse(stream1, {
-          headers: {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
-          },
-        })
+        return new StreamingTextResponse(stream)
       } catch (error: any) {
-        console.error("Streaming error:", error)
+        console.error("Error parsing Anthropic API response:", error)
         return new NextResponse(
-          JSON.stringify({ 
-            message: "Error establishing stream connection" 
+          JSON.stringify({
+            message: "An error occurred while parsing the Anthropic API response"
           }),
           { status: 500 }
         )
