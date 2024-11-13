@@ -1,6 +1,14 @@
 import { supabase } from "@/lib/supabase/browser-client"
 import { TablesInsert, TablesUpdate } from "@/supabase/types"
 
+interface ModelUsage {
+  [model: string]: number;
+}
+
+interface DailyUsage {
+  [date: string]: ModelUsage;
+}
+
 export const getProfileByUserId = async (userId: string) => {
   const { data: profile, error } = await supabase
     .from("profiles")
@@ -72,33 +80,33 @@ export const deleteProfile = async (profileId: string) => {
 
 export const incrementModelUsage = async (userId: string, model: string) => {
   const today = new Date().toISOString().split('T')[0];
-  
+
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('daily_usage, usage_reset_date')
-    .eq('user_id', userId)
-    .single();
+  .from('profiles')
+  .select('daily_usage, usage_reset_date')
+  .eq('user_id', userId)
+  .single();
 
   // Reset usage if it's a new day
   if (!profile?.usage_reset_date || new Date(profile.usage_reset_date).toISOString().split('T')[0] !== today) {
-    await supabase
-      .from('profiles')
-      .update({ 
-        daily_usage: { [today]: { [model]: 1 } },
-        usage_reset_date: new Date().toISOString()
-      })
-      .eq('user_id', userId);
-    return;
-  }
-
-  // Increment usage for model
-  const usage = profile?.daily_usage?.[today] ?? {};
-  usage[model] = (usage[model] || 0) + 1;
-
   await supabase
     .from('profiles')
     .update({ 
-      daily_usage: { [today]: usage }
+      daily_usage: { [today]: { [model]: 1 } },
+      usage_reset_date: new Date().toISOString()
     })
     .eq('user_id', userId);
+  return;
+  }
+
+  // Increment usage for model with proper typing
+  const usage = (profile?.daily_usage as DailyUsage)?.[today] ?? {} as ModelUsage;
+  usage[model] = (usage[model] || 0) + 1;
+
+  await supabase
+  .from('profiles')
+  .update({ 
+    daily_usage: { [today]: usage }
+  })
+  .eq('user_id', userId);
 }
