@@ -6,12 +6,6 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface ProfileUsage {
-  [date: string]: {
-    [model: string]: number
-  }
-}
-
 export interface Database {
   graphql_public: {
     Tables: {
