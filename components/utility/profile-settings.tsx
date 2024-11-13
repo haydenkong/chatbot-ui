@@ -780,6 +780,77 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
             </TabsContent>
 
             <TabsContent className="mt-4 space-y-4" value="usage">
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>Usage Information</Label>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={fetchUsage}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <IconLoader2 className="animate-spin mr-2" size={18} />
+                    ) : (
+                      "Refresh"
+                    )}
+                  </Button>
+                </div>
+
+                <div className="mb-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                  <div className="space-y-2">
+                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                      Usage resets daily at midnight UTC. You'll be notified here when approaching limits.
+                    </p>
+                    <button 
+                       onClick={() => window.open('https://pixelverse.fillout.com/t/uihmbUBUmXus', '_blank')}
+                       className="mt-2 px-4 py-2 text-sm bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 rounded hover:opacity-80"
+                    >
+                      Give Feedback
+                    </button>
+                  </div>
+                </div>
+
+                {loading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <IconLoader2 className="animate-spin" size={24} />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {Object.entries(tierLimits || {}).map(([model, limit]) => {
+                      if (model === "messages_per_day") return null;
+                      const used = (usage || {})[model] || 0;
+                      const usagePercentage = limit === -1 ? 0 : (used / limit) * 100;
+
+                      if (usagePercentage >= 75) {
+                        return (
+                          <div key={model} className={cn(
+                            "p-4 rounded-lg",
+                            usagePercentage >= 100 ? "bg-red-100 dark:bg-red-900" : "bg-yellow-100 dark:bg-yellow-900"
+                          )}>
+                            <div className="font-medium mb-1">
+                              {model}
+                            </div>
+                            {usagePercentage >= 100 ? (
+                              <p className="text-sm text-red-600 dark:text-red-200">
+                                Daily limit reached. Limit resets at midnight UTC.
+                              </p>
+                            ) : (
+                              <p className="text-sm text-yellow-600 dark:text-yellow-200">
+                                Warning: Approaching daily limit ({Math.round(usagePercentage)}% used)
+                              </p>
+                            )}
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* <TabsContent className="mt-4 space-y-4" value="usage">
   <div className="mt-6 space-y-4">
     <div className="flex items-center justify-between">
       <Label>Daily Usage Statistics</Label>
@@ -874,12 +945,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
       </div>
     )}
   </div>
-</TabsContent>
-
-
-
-
-
+</TabsContent> */}
 
 
 
