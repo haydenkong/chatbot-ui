@@ -1,6 +1,13 @@
 import { supabase } from "@/lib/supabase/browser-client"
 import { TablesInsert, TablesUpdate } from "@/supabase/types"
 
+// Add types for new fields
+interface ProfileUsage {
+  [date: string]: {
+    [model: string]: number
+  }
+}
+
 export const getProfileByUserId = async (userId: string) => {
   const { data: profile, error } = await supabase
     .from("profiles")
@@ -73,32 +80,69 @@ export const deleteProfile = async (profileId: string) => {
 export const incrementModelUsage = async (userId: string, model: string) => {
   const today = new Date().toISOString().split('T')[0];
   
-  const { data: profile } = await supabase
+  const { data: profile, error: fetchError } = await supabase
     .from('profiles')
     .select('daily_usage, usage_reset_date')
     .eq('user_id', userId)
     .single();
 
-  // Reset usage if it's a new day
+  if (fetchError) {
+    throw new Error(`Failed to fetch profile: ${fetchError.message}`);
+  }
+
+  // Reset usage if it's a new day but preserve history
   if (!profile?.usage_reset_date || new Date(profile.usage_reset_date).toISOString().split('T')[0] !== today) {
-    await supabase
+    const { error: resetError } = await supabase
       .from('profiles')
       .update({ 
-        daily_usage: { [today]: { [model]: 1 } },
-        usage_reset_date: new Date()
+        daily_usage: { 
+          ...profile?.daily_usage,
+          [today]: { [model]: 1 } 
+        },
+        usage_reset_date: new Date().toISOString()
       })
       .eq('user_id', userId);
+
+    if (resetError) {
+      throw new Error(`Failed to reset usage: ${resetError.message}`);
+    }
     return;
   }
 
-  // Increment usage for model
-  const usage = profile.daily_usage[today] || {};
-  usage[model] = (usage[model] || 0) + 1;
+  // Use existing daily usage or initialize new
+  const currentUsage = profile.daily_usage || {};
+  const todayUsage = currentUsage[today] || {};
+  const newUsage = {
+    ...currentUsage,
+    [today]: {
+      ...todayUsage,
+      [model]: (todayUsage[model] || 0) + 1
+    }
+  };
 
-  await supabase
+  const { error: updateError } = await supabase
     .from('profiles')
-    .update({ 
-      daily_usage: { [today]: usage }
-    })
+    .update({ daily_usage: newUsage })
     .eq('user_id', userId);
+
+  if (updateError) {
+    throw new Error(`Failed to update usage: ${updateError.message}`);
+  }
+}
+
+// Add helper function to get usage
+export const getDailyUsage = async (userId: string) => {
+  const today = new Date().toISOString().split('T')[0];
+  
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('daily_usage')
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to fetch usage: ${error.message}`);
+  }
+
+  return profile.daily_usage?.[today] || {};
 }

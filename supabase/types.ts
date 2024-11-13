@@ -1163,6 +1163,8 @@ export interface Database {
           user_id: string
           username: string
           tier: string | null
+          daily_usage: ProfileUsage
+          usage_reset_date: string
         }
         Insert: {
           anthropic_api_key?: string | null
