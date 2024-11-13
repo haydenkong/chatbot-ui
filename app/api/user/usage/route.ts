@@ -10,36 +10,18 @@ const supabase = createClient(
 export async function GET(request: Request) {
   try {
     const profile = await getServerProfile()
-    const today = new Date()
-    const midnight = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      0, 0, 0, 0
-    )
+    const today = new Date().toISOString().split('T')[0]
 
-    console.log("Profile:", profile)
-    console.log("UTC Date used:", midnight.toISOString())
+    const { data: profileData, error } = await supabase
+      .from('profiles')
+      .select('daily_usage, usage_reset_date')
+      .eq('user_id', profile.user_id)
+      .single()
 
-    const { data: messages, error } = await supabase
-      .from("messages")
-      .select("model, created_at")
-      .eq("user_id", profile.user_id)
-      .eq("role", "assistant") // Add this line to only count assistant responses
-      .gte("created_at", midnight.toISOString())
+    if (error) throw new Error(error.message)
+    if (!profileData) return new Response("Profile not found", { status: 404 })
 
-    console.log("Messages found:", messages?.length)
-    console.log("Query error:", error)
-    console.log("Raw messages:", messages)
-
-    if (!messages) return new Response("No messages found", { status: 404 })
-
-    const usage = messages.reduce((acc, msg) => {
-      acc[msg.model] = (acc[msg.model] || 0) + 1
-      return acc 
-    }, {} as Record<string, number>)
-
-    console.log("Calculated usage:", usage)
+    const usage = profileData.daily_usage?.[today] ?? {}
 
     return new Response(JSON.stringify({ usage }), { status: 200 })
   } catch (error) {
