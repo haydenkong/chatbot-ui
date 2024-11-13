@@ -802,6 +802,12 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
         <p className="text-sm text-yellow-800 dark:text-yellow-200">
           Usage resets daily at midnight UTC. These limits help ensure fair usage for all users.
         </p>
+        <button 
+           onClick={() => window.open('https://pixelverse.fillout.com/t/uihmbUBUmXus', '_blank')}
+           className="mt-2 px-4 py-2 text-sm bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 rounded hover:opacity-80"
+           >
+          Give Feedback
+        </button>
       </div>
     </div>
 
@@ -820,33 +826,35 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
           return (
             <div key={model} className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>{model}</span>
-                <span>
-                  {used} / {limit === -1 ? "∞" : limit} messages
-                </span>
+              <span>{model}</span>
+              <span>
+                {used} / {limit === -1 ? "∞" : limit} messages
+              </span>
               </div>
 
               {limit !== -1 && (
-                <div className="h-2 rounded-full bg-secondary">
-                  <div
-                    className={cn(
-                      "h-full rounded-full transition-all",
-                      usagePercentage >= 90
-                        ? "bg-red-500"
-                        : usagePercentage >= 75
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
-                    )}
-                    style={{ width: `${Math.min(usagePercentage, 100)}%` }}
-                  />
-                </div>
+              <div className="h-2 rounded-full bg-secondary">
+                <div
+                className={cn(
+                  "h-full rounded-full transition-all",
+                  usagePercentage >= 100
+                  ? "bg-red-500"
+                  : usagePercentage >= 75
+                  ? "bg-yellow-500"
+                  : "bg-green-500"
+                )}
+                style={{ width: `${Math.min(usagePercentage, 100)}%` }}
+                />
+              </div>
               )}
 
-              {usagePercentage >= 90 && (
-                <p className="text-xs text-red-500">
-                  Warning: Approaching daily limit
-                </p>
-              )}
+              {usagePercentage >= 100 ? (
+              <p className="text-xs text-red-500">Limit reached for today.</p>
+              ) : usagePercentage >= 90 ? (
+              <p className="text-xs text-red-500">
+                Warning: Approaching daily limit
+              </p>
+              ) : null}
             </div>
           );
         })}
