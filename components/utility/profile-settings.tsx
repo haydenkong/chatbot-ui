@@ -800,7 +800,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                 <div className="mb-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
                   <div className="space-y-2">
                     <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                      Usage resets daily at midnight UTC. You'll be notified here when approaching limits.
+                      Usage resets daily at midnight UTC. You&apos;ll be notified here when approaching limits.
                     </p>
                     <button 
                        onClick={() => window.open('https://pixelverse.fillout.com/t/uihmbUBUmXus', '_blank')}
