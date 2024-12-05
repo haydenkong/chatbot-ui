@@ -60,10 +60,10 @@ const LLaMA32_11B: LLM = {
 }
 
 const LLaMA32_90B: LLM = {
-  modelId: "llama-3.2-90b-text-preview",
+  modelId: "llama-3.2-90b-vision-preview",
   modelName: "Meta Llama 3.2 (90B)",
   provider: "groq",
-  hostedId: "llama-3.2-90b-text-preview",
+  hostedId: "llama-3.2-90b-vision-preview",
   platformLink: GROQ_PLATORM_LINK,
   imageInput: true,
 }
