@@ -30,26 +30,20 @@ export async function POST(request: Request) {
       // }
     });
 
-    // Filter out system messages if the model doesn't support them
-    const supportsSystemMessages = CHAT_SETTING_LIMITS[chatSettings.model]?.SUPPORTS_SYSTEM_MESSAGES !== false;
-    const filteredMessages = supportsSystemMessages 
-      ? messages 
-      : messages.filter(msg => msg.role !== 'system');
-
     const response = await openai.chat.completions.create({
       model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
-      messages: filteredMessages as ChatCompletionCreateParamsBase["messages"],
+      messages: messages as ChatCompletionCreateParamsBase["messages"],
       temperature: chatSettings.temperature,
       max_tokens: 
         chatSettings.model === "o1-preview" || chatSettings.model === "o1-mini"
-          ? 32768
+          ? 32768 // For o1 models
           : chatSettings.model === "gpt-4o-mini" 
           ? 16383  
           : chatSettings.model === "gpt-4o"
           ? 4096
-          : 4096,
+          : 4096, // Default fallback
       stream: true
-    });
+    })
 
     const stream = OpenAIStream(response)
 
