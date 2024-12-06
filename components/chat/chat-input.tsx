@@ -241,10 +241,10 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
           className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           placeholder={t(
             window.innerWidth < 768
-              ? `Ask anything. Message ${chatSettings?.model}. @, /, #, !`
+              ? `Message ${chatSettings?.model}. Ask anything. @, /, #, !`
               : window.innerWidth < 1280
-                ? `Ask anything. Message ${chatSettings?.model}. @, /, #, !`
-                : `Ask anything. Message ${chatSettings?.model}. Type "@" for assistants, "/" for prompts, "#" for files, and "!" for tools.`
+                ? `Message ${chatSettings?.model}. Ask anything. @, /, #, !`
+                : `Message ${chatSettings?.model}. Ask anything. Type "@" for assistants, "/" for prompts, "#" for files, and "!" for tools.`
           )}
           onValueChange={handleInputChange}
           value={userInput}
