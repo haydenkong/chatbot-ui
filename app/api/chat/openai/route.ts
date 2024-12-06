@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       //   'cf-cache-ttl': 172800000
       // }
     });
-    
+
     // Before the OpenAI call
     const isO1Model = chatSettings.model === "o1-preview" || chatSettings.model === "o1-mini";
     const filteredMessages = isO1Model 
@@ -40,14 +40,18 @@ export async function POST(request: Request) {
       model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
       messages: filteredMessages as ChatCompletionCreateParamsBase["messages"],
       temperature: chatSettings.temperature,
-      max_tokens: 
-        isO1Model
-          ? 32768 // For o1 models
-          : chatSettings.model === "gpt-4o-mini" 
-          ? 16383  
-          : chatSettings.model === "gpt-4o"
-          ? 4096
-          : 4096,
+      ...(isO1Model 
+        ? {
+            max_completion_tokens: 32768 // For o1 models
+          }
+        : {
+            max_tokens: chatSettings.model === "gpt-4o-mini" 
+              ? 16383  
+              : chatSettings.model === "gpt-4o"
+              ? 4096
+              : 4096
+          }
+      ),
       stream: true
     });
 
