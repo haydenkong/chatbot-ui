@@ -2,6 +2,28 @@ import { LLM } from "@/types"
 
 const OPENAI_PLATORM_LINK = "https://platform.openai.com/docs/overview"
 
+
+// OpenAI o1 Models
+
+const o1Mini: LLM = {
+  modelId: "o1-mini",
+  modelName: "o1 Mini",
+  provider: "openai",
+  hostedId: "o1-mini",
+  platformLink: OPENAI_PLATORM_LINK,
+  imageInput: false,
+}
+
+const o1preview: LLM = {
+  modelId: "o1-preview",
+  modelName: "o1 Preview",
+  provider: "openai",
+  hostedId: "o1-preview",
+  platformLink: OPENAI_PLATORM_LINK,
+  imageInput: false,
+}
+
+
 // OpenAI Models (UPDATED 1/25/24) -----------------------------
 
 const GPT4oMini: LLM = {
@@ -64,6 +86,8 @@ const GPT3_5Turbo: LLM = {
 }
 
 export const OPENAI_LLM_LIST: LLM[] = [
+  o1Mini,
+  o1preview,
   GPT4oMini,
   GPT4o,
   GPT4Turbo,
