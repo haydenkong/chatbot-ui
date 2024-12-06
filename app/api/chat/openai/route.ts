@@ -34,13 +34,14 @@ export async function POST(request: Request) {
       model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
       messages: messages as ChatCompletionCreateParamsBase["messages"],
       temperature: chatSettings.temperature,
-      max_tokens:
-        chatSettings.model === "gpt-4-1106-vision-preview" ||
-        chatSettings.model === "gpt-4o"
+      max_tokens: 
+        chatSettings.model === "o1-preview" || chatSettings.model === "o1-mini"
+          ? 32768 // For o1 models
+          : chatSettings.model === "gpt-4o-mini" 
+          ? 16383  
+          : chatSettings.model === "gpt-4o"
           ? 4096
-          : chatSettings.model === "gpt-4o-mini"
-          ? 16383
-          : null, 
+          : 4096, // Default fallback
       stream: true
     })
 
