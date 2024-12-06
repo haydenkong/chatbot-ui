@@ -27,7 +27,7 @@ const GEMINI_PRO: LLM = {
 // Gemini Pro 1.5 (UPDATED 12/22/23)
 const GEMINI_PRO_15: LLM = {
   modelId: "gemini-1.5-pro-latest",
-  modelName: "Gemini Pro 1.5",
+  modelName: "Gemini 1.5 Pro",
   provider: "google",
   hostedId: "gemini-1.5-pro-latest",
   platformLink: GOOGLE_PLATORM_LINK,
