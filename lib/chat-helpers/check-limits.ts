@@ -32,6 +32,13 @@ export const checkMessageLimits = async (userId: string, tier: string, model: st
   const modelUsage = usage[model] || 0;
   const totalUsage = Object.values(usage).reduce((sum: number, val: number) => sum + val, 0);
 
+  if (modelLimit === 0) {
+    return {
+      allowed: false,
+      error: `Oops. You current plan does not have access to this model. You need to upgrade to a higher plan to access ${model}`
+    };
+  }
+
   if (modelLimit !== -1 && modelUsage >= modelLimit) {
     return {
       allowed: false,
