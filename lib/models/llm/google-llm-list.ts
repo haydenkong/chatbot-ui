@@ -55,4 +55,15 @@ const GEMINI_2_FLASH: LLM = {
   badge: ["NEW"]
 }
 
-export const GOOGLE_LLM_LIST: LLM[] = [GEMINI_PRO, GEMINI_PRO_VISION, GEMINI_FLASH, GEMINI_PRO_15, GEMINI_2_FLASH]
+// Gemini Experimental 1206
+const GEMINI_EXPERIMENTAL_1206: LLM = {
+  modelId: "gemini-exp-1206",
+  modelName: "Gemini Experimental 1206",
+  provider: "google",
+  hostedId: "gemini-exp-1206",
+  platformLink: GOOGLE_PLATORM_LINK,
+  imageInput: true,
+  badge: ["BETA"]
+}
+
+export const GOOGLE_LLM_LIST: LLM[] = [GEMINI_PRO, GEMINI_PRO_VISION, GEMINI_FLASH, GEMINI_PRO_15, GEMINI_2_FLASH, GEMINI_EXPERIMENTAL_1206]
