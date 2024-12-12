@@ -9,7 +9,7 @@ const GEMINI_FLASH: LLM = {
   modelId: "gemini-1.5-flash-latest",
   modelName: "Gemini 1.5 Flash",
   provider: "google",
-  hostedId: "	gemini-1.5-flash-latest",
+  hostedId: "gemini-1.5-flash-latest",
   platformLink: GOOGLE_PLATORM_LINK,
   imageInput: true
 }
