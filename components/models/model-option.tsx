@@ -19,7 +19,7 @@ export const ModelOption: FC<ModelOptionProps> = ({ model, onSelect }) => {
         <div className="flex items-center space-x-2">
           <div className="text-sm font-semibold">{model.modelName}</div>
           
-          {model.badges?.map((badge, index) => (
+          {model.badge?.map((badge, index) => (
             <span 
               key={index}
               className={`ml-1 px-1.5 py-0.5 text-xs font-medium rounded ${
