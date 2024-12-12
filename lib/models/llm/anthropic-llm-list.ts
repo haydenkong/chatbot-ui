@@ -52,7 +52,8 @@ const CLAUDE_3_OPUS: LLM = {
   provider: "anthropic",
   hostedId: "claude-3-opus-20240229",
   platformLink: ANTHROPIC_PLATFORM_LINK,
-  imageInput: true
+  imageInput: true,
+  badge: ["PLUS"]
 }
 
 // Claude 3.5 Sonnet (UPDATED 06/20/24)
@@ -63,6 +64,7 @@ const CLAUDE_3_5_SONNET: LLM = {
   hostedId: "claude-3-5-sonnet-20240620",
   platformLink: ANTHROPIC_PLATFORM_LINK,
   imageInput: true,
+  badge: ["PLUS"]
 }
 
 export const ANTHROPIC_LLM_LIST: LLM[] = [
