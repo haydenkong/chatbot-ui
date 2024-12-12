@@ -51,7 +51,8 @@ const GEMINI_2_FLASH: LLM = {
   provider: "google",
   hostedId: "gemini-2.0-flash-exp",
   platformLink: GOOGLE_PLATORM_LINK,
-  imageInput: true
+  imageInput: true,
+  badge: "NEW"
 }
 
 export const GOOGLE_LLM_LIST: LLM[] = [GEMINI_PRO, GEMINI_PRO_VISION, GEMINI_FLASH, GEMINI_PRO_15, GEMINI_2_FLASH]

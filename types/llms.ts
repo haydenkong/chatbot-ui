@@ -79,6 +79,7 @@ export interface LLM {
   hostedId: string
   platformLink: string
   imageInput: boolean
+  badge?: "NEW" | "PLUS" | "BETA" // Add this optional badge property
 }
 
 export interface OpenRouterLLM extends LLM {
