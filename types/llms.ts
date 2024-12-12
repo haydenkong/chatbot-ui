@@ -72,13 +72,16 @@ export type PerplexityLLMID =
   | "sonar-medium-chat" // Sonar Medium Chat
   | "sonar-medium-online" // Sonar Medium Online
 
+export type LLMBadge = "NEW" | "PLUS" | "PREVIEW" | "BETA"
+
 export interface LLM {
-  modelId: LLMID
+  modelId: string
   modelName: string
   provider: ModelProvider
   hostedId: string
   platformLink: string
   imageInput: boolean
+  badges?: LLMBadge[] // Add this field
 }
 
 export interface OpenRouterLLM extends LLM {
