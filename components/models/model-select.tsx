@@ -66,7 +66,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({
 
   const groupedModels = allModels.reduce<Record<string, LLM[]>>(
     (groups, model) => {
-      const key = model.provider
+      // For Groq models that contain "Meta" in their name, 
+      // put them in a "meta" group instead of "groq"
+      const key = model.provider === "groq" && model.modelName.includes("Meta") 
+        ? "meta"
+        : model.provider
+        
       if (!groups[key]) {
         groups[key] = []
       }
