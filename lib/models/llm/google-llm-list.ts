@@ -51,7 +51,7 @@ const GEMINI_2_FLASH: LLM = {
   provider: "google",
   hostedId: "gemini-2.0-flash-exp",
   platformLink: GOOGLE_PLATORM_LINK,
-  imageInput: true
+  imageInput: true,
   badges: ["NEW"]
 }
 
