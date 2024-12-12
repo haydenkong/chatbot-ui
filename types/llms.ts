@@ -52,6 +52,7 @@ export type GroqLLMID =
   | "llama-3.2-3b-preview" // LLaMA3.2-3b
   | "llama-3.2-11b-vision-preview" // LLaMA3.2-11b
   | "llama-3.2-90b-vision-preview" // LLaMA3.2-90b
+  | "llama-3.3-70b-versatile" // LLaMA3.3-70b
   | "mixtral-8x7b-32768" // Mixtral-8x7b
   | "gemma-7b-it" // Gemma-7b IT
   | "gemma2-9b-it" // Gemma2-70b IT

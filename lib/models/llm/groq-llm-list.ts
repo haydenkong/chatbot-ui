@@ -68,6 +68,16 @@ const LLaMA32_90B: LLM = {
   imageInput: true,
 }
 
+const LLaMA33_70B: LLM = {
+  modelId: "llama-3.3-70b-versatile",
+  modelName: "Meta Llama 3.3 (70B)",
+  provider: "groq",
+  hostedId: "llama-3.3-70b-versatile",
+  platformLink: GROQ_PLATORM_LINK,
+  imageInput: false,
+  badge: ["NEW"]
+}
+
 // Mixtral models
 const MIXTRAL_8X7B: LLM = {
   modelId: "mixtral-8x7b-32768",
@@ -105,6 +115,7 @@ export const GROQ_LLM_LIST: LLM[] = [
   LLaMA32_3B,
   LLaMA32_11B,
   LLaMA32_90B,
+  LLaMA33_70B,
   MIXTRAL_8X7B,
   GEMMA_7B_IT,
   GEMMA2_7B_IT
