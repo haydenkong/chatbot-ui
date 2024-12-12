@@ -12,6 +12,7 @@ const o1Mini: LLM = {
   hostedId: "o1-mini",
   platformLink: OPENAI_PLATORM_LINK,
   imageInput: false,
+  badge: ["NEW", "PLUS"]
 }
 
 const o1preview: LLM = {
@@ -21,6 +22,7 @@ const o1preview: LLM = {
   hostedId: "o1-preview",
   platformLink: OPENAI_PLATORM_LINK,
   imageInput: false,
+  badge: ["NEW", "PLUS"]
 }
 
 
