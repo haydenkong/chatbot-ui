@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils"
 import mistral from "@/public/providers/mistral.png"
 import groq from "@/public/providers/groq.png"
 import perplexity from "@/public/providers/perplexity.png"
-import meta from "@/public/providers/meta.png"
 import { ModelProvider } from "@/types"
 import { IconSparkles } from "@tabler/icons-react"
 import { useTheme } from "next-themes"
@@ -53,20 +52,6 @@ export const ModelIcon: FC<ModelIconProps> = ({
         />
       )
     case "groq":
-      if (model.modelName?.includes("Meta")) {
-        return (
-          <Image
-            className={cn(
-              "rounded-sm p-0",
-              theme === "dark" ? "bg-white" : "border-[1px] border-black"
-            )}
-            src={meta.src}
-            alt="Meta"
-            width={width}
-            height={height}
-          />
-        )
-      }
       return (
         <Image
           className={cn(
