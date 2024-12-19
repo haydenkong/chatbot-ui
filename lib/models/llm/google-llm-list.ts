@@ -55,6 +55,17 @@ const GEMINI_2_FLASH: LLM = {
   badge: ["NEW"]
 }
 
+// Gemini 2.0 Flash Thinking Exp 1219
+const GEMINI_2_FLASH_DEEPTHINK_EXP: LLM = {
+  modelId: "gemini-2.0-flash-thinking-exp-1219",
+  modelName: "Gemini 2 Flash Thinking",
+  provider: "google",
+  hostedId: "gemini-2.0-flash-thinking-exp-1219",
+  platformLink: GOOGLE_PLATORM_LINK,
+  imageInput: true,
+  badge: ["BETA", "NEW"]
+}
+
 // Gemini Experimental 1206
 const GEMINI_EXPERIMENTAL_1206: LLM = {
   modelId: "gemini-exp-1206",
@@ -66,4 +77,6 @@ const GEMINI_EXPERIMENTAL_1206: LLM = {
   badge: ["BETA"]
 }
 
-export const GOOGLE_LLM_LIST: LLM[] = [GEMINI_PRO, GEMINI_PRO_VISION, GEMINI_FLASH, GEMINI_PRO_15, GEMINI_2_FLASH, GEMINI_EXPERIMENTAL_1206]
+
+
+export const GOOGLE_LLM_LIST: LLM[] = [GEMINI_PRO, GEMINI_PRO_VISION, GEMINI_FLASH, GEMINI_PRO_15, GEMINI_2_FLASH, GEMINI_2_FLASH_DEEPTHINK_EXP, GEMINI_EXPERIMENTAL_1206]

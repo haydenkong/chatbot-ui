@@ -50,6 +50,12 @@ export const CHAT_SETTING_LIMITS: Record<LLMID, ChatSettingLimits> = {
   },
 
   // GOOGLE MODELS
+  "gemini-2.0-flash-thinking-exp-1219": {
+    MIN_TEMPERATURE: 0.0,
+    MAX_TEMPERATURE: 2.0,
+    MAX_TOKEN_OUTPUT_LENGTH: 8192,
+    MAX_CONTEXT_LENGTH: 32767
+  },
   "gemini-exp-1206": {
     MIN_TEMPERATURE: 0.0,
     MAX_TEMPERATURE: 2.0,
