@@ -187,6 +187,12 @@ export const CHAT_SETTING_LIMITS: Record<LLMID, ChatSettingLimits> = {
     MAX_TOKEN_OUTPUT_LENGTH: 8192,
     MAX_CONTEXT_LENGTH: 8192
   },
+  "deepseek-r1-distill-llama-70b": {
+    MIN_TEMPERATURE: 0.0,
+    MAX_TEMPERATURE: 2.0,
+    MAX_TOKEN_OUTPUT_LENGTH: 8192,
+    MAX_CONTEXT_LENGTH: 128000
+  },
 
   // OPENAI MODELS
   "gpt-3.5-turbo": {

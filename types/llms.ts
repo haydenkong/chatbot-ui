@@ -58,6 +58,7 @@ export type GroqLLMID =
   | "mixtral-8x7b-32768" // Mixtral-8x7b
   | "gemma-7b-it" // Gemma-7b IT
   | "gemma2-9b-it" // Gemma2-70b IT
+  | "deepseek-r1-distill-llama-70b" // DeepSeek R1 Distill LLaMA-70b
 
 // Perplexity Models (UPDATED 1/31/24)
 export type PerplexityLLMID =

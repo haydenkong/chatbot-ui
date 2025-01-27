@@ -2,6 +2,18 @@ import { LLM } from "@/types"
 
 const GROQ_PLATORM_LINK = "https://groq.com/"
 
+
+// DeepSeek Models
+const DeepSeek_R1: LLM = {
+  modelId: "deepseek-r1-distill-llama-70b",
+  modelName: "DeepSeek R1",
+  provider: "groq",
+  hostedId: "deepseek-r1-distill-llama-70b",
+  platformLink: GROQ_PLATORM_LINK,
+  imageInput: false,
+  badge: ["PLUS", "NEW"]
+}
+
 // Llama 3 models
 const LLaMA3_8B: LLM = {
   modelId: "llama3-8b-8192",
