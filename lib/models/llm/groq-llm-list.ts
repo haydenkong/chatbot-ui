@@ -120,6 +120,7 @@ const GEMMA2_7B_IT: LLM = {
 }
 
 export const GROQ_LLM_LIST: LLM[] = [
+  DeepSeek_R1,
   LLaMA3_8B,
   LLaMA3_70B,
   LLaMA31_8B,
