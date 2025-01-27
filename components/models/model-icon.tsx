@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils"
 import mistral from "@/public/providers/mistral.png"
 import groq from "@/public/providers/groq.png"
 import perplexity from "@/public/providers/perplexity.png"
+import meta from "@/public/providers/meta.png"
+import deekseek from "@/public/providers/deekseek.jpg"
 import { ModelProvider } from "@/types"
 import { IconSparkles } from "@tabler/icons-react"
 import { useTheme } from "next-themes"
@@ -39,6 +41,7 @@ export const ModelIcon: FC<ModelIconProps> = ({
         />
       )
     case "mistral":
+    case "groq-mixtral":
       return (
         <Image
           className={cn(
@@ -77,16 +80,17 @@ export const ModelIcon: FC<ModelIconProps> = ({
         />
       )
     case "google":
+    case "groq-google":
       return (
-        <GoogleSVG
-          className={cn(
-            "rounded-sm bg-[#fff] p-1 text-black",
-            props.className,
-            theme === "dark" ? "bg-white" : "border-[1px] border-black"
-          )}
-          width={width}
-          height={height}
-        />
+      <GoogleSVG
+        className={cn(
+        "rounded-sm bg-[#fff] p-1 text-black",
+        props.className,
+        theme === "dark" ? "bg-white" : "border-[1px] border-black"
+        )}
+        width={width}
+        height={height}
+      />
       )
     case "perplexity":
       return (
@@ -97,6 +101,32 @@ export const ModelIcon: FC<ModelIconProps> = ({
           )}
           src={perplexity.src}
           alt="Mistral"
+          width={width}
+          height={height}
+        />
+      )
+    case "groq-meta":
+      return (
+        <Image
+          className={cn(
+            "rounded-sm p-1",
+            theme === "dark" ? "bg-white" : "border-[1px] border-black"
+          )}
+          src={meta.src}
+          alt="Meta"
+          width={width}
+          height={height}
+        />
+      )
+    case "deepseek":
+      return (
+        <Image
+          className={cn(
+            "rounded-sm p-1",
+            theme === "dark" ? "bg-white" : "border-[1px] border-black"
+          )}
+          src={deepseek.src}
+          alt="DeepSeek"
           width={width}
           height={height}
         />
