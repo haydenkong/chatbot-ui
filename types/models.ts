@@ -1,12 +1,13 @@
-export type ModelProvider =
-  | "anthropic"
-  | "openai"
-  | "google"
+export type ModelProvider = 
+  | "openai" 
+  | "anthropic" 
+  | "google" 
   | "mistral"
-  | "perplexity"
   | "groq"
-  | "groq-meta"    // Added
-  | "groq-google"  // Added
-  | "groq-mixtral" // Added
-  | "groq-deepseek" // Added
-  | "deekseek"
+  | "perplexity"
+  | "meta"
+  | "deepseek"
+  | "groq-meta"
+  | "groq-google"
+  | "groq-mixtral"
+  | "custom" // Add this line
