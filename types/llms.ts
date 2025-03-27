@@ -23,13 +23,12 @@ export type OpenAILLMID =
 
 // Google Models
 export type GoogleLLMID =
-  | "gemini-pro" // Gemini Pro
-  | "gemini-pro-vision" // Gemini Pro Vision
   | "gemini-1.5-flash-latest"
   | "gemini-1.5-pro-latest"
-  | "gemini-2.0-flash-exp"
-  | "gemini-exp-1206" // Gemini Experimental
-  | "gemini-2.0-flash-thinking-exp-1219" // Gemini 2 Flash Deep Thinking Exp
+  | "gemini-2.0-flash"
+  | "gemini-2.0-flash-lite" // Gemini 2 Flash Lite
+  | "gemini-2.0-flash-thinking-exp-01-21" // Gemini 2 Flash Thinking Exp
+  | "gemini-2.5-pro-exp-03-25" // Gemini 2.5 Pro Exp
 
 // Anthropic Models
 export type AnthropicLLMID =
