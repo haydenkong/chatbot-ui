@@ -64,29 +64,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     ...availableOpenRouterModels
   ]
 
-  const groupedModels = allModels.reduce<Record<string, LLM[]>>((groups, model) => {
-    // Special handling for Groq models to create sub-categories
-    if (model.provider === "groq") {
-      const subCategory = 
-        model.modelName.toLowerCase().includes("llama") ? "groq-meta" :
-        model.modelName.toLowerCase().includes("gemma") ? "groq-google" :
-        model.modelName.toLowerCase().includes("mixtral") ? "groq-mixtral" :
-        model.modelName.toLowerCase().includes("deepseek") ? "groq-deepseek" :
-        "groq-other";
-      
-      if (!groups[subCategory]) {
-        groups[subCategory] = [];
+  const groupedModels = allModels.reduce<Record<string, LLM[]>>(
+    (groups, model) => {
+      const key = model.provider
+      if (!groups[key]) {
+        groups[key] = []
       }
-      groups[subCategory].push(model);
-    } else {
-      // Handle other providers normally
-      if (!groups[model.provider]) {
-        groups[model.provider] = [];
-      }
-      groups[model.provider].push(model);
-    }
-    return groups;
-  }, {});
+      groups[key].push(model)
+      return groups
+    },
+    {}
+  )
 
   const selectedModel = allModels.find(
     model => model.modelId === selectedModelId
@@ -180,12 +168,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({
             return (
               <div key={provider}>
                 <div className="mb-1 ml-2 text-xs font-bold tracking-wide opacity-50">
-                  {provider === "groq-meta" ? "Meta" :
-                   provider === "groq-google" ? "Groq - Google" :
-                   provider === "groq-mixtral" ? "Groq - Mixtral" :
-                   provider === "groq-deepseek" ? "DeepSeek" :
-                   provider === "openai" && profile.use_azure_openai ? "AZURE OPENAI" :
-                   provider.toLocaleUpperCase()}
+                  {provider === "openai" && profile.use_azure_openai
+                    ? "AZURE OPENAI"
+                    : provider.toLocaleUpperCase()}
                 </div>
 
                 <div className="mb-4">
