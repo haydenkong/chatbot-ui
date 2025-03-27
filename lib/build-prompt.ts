@@ -184,7 +184,6 @@ function buildRetrievalText(fileItems: Tables<"file_items">[]) {
 }
 
 function adaptSingleMessageForGoogleGemini(message: any) {
-
   let adaptedParts = []
 
   let rawParts = []
@@ -209,9 +208,10 @@ function adaptSingleMessageForGoogleGemini(message: any) {
     }
   }
 
+  // Updated role mapping for new Gemini API
   let role = 'user'
-  if(["user", "system"].includes(message.role)) {
-    role = 'user'
+  if(message.role === 'system') {
+    role = 'user' // Gemini API treats system messages as user messages
   } else if(message.role === 'assistant') {
     role = 'model'
   }
@@ -222,39 +222,61 @@ function adaptSingleMessageForGoogleGemini(message: any) {
   }
 }
 
-function adaptMessagesForGeminiVision(
-  messages: any[]
-) {
-  // Gemini Pro Vision cannot process multiple messages
-  // Reformat, using all texts and last visual only
+function adaptMessagesForGeminiVision(messages: any[]) {
+  // New implementation based on updated Gemini API for vision
+  // Check if any message has image content
+  const hasImages = messages.some(message => 
+    message.parts.some(part => part.inlineData && part.inlineData.mimeType?.startsWith('image/'))
+  );
+  
+  if (!hasImages) {
+    return messages; // No special handling needed if no images
+  }
 
-  const basePrompt = messages[0].parts[0].text
-  const baseRole = messages[0].role
-  const lastMessage = messages[messages.length-1]
-  const visualMessageParts = lastMessage.parts;
-  let visualQueryMessages = [{
+  // For vision models, we need to:
+  // 1. Extract the system message/prompt from the first message
+  // 2. Combine with the user's most recent query and images
+  const systemMessage = messages[0].parts[0].text || '';
+  
+  // Find the last user message with images
+  let lastUserMessageIndex = messages.length - 1;
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === 'user') {
+      lastUserMessageIndex = i;
+      break;
+    }
+  }
+
+  // Get all parts from the last user message
+  const userParts = messages[lastUserMessageIndex].parts;
+  
+  // Create a single message with system context + user query + images
+  return [{
     role: "user",
     parts: [
-      `${baseRole}:\n${basePrompt}\n\nuser:\n${visualMessageParts[0].text}\n\n`,
-      visualMessageParts.slice(1)
+      { text: `${systemMessage}\n\n${userParts.find(part => part.text)?.text || ''}` },
+      ...userParts.filter(part => part.inlineData)
     ]
-  }]
-  return visualQueryMessages
+  }];
 }
 
 export async function adaptMessagesForGoogleGemini(
   payload: ChatPayload,
-  messages:  any[]
+  messages: any[]
 ) {
   let geminiMessages = []
+  
+  // First convert all messages to Gemini format
   for (let i = 0; i < messages.length; i++) {
     let adaptedMessage = adaptSingleMessageForGoogleGemini(messages[i])
     geminiMessages.push(adaptedMessage)
   }
 
-  if(payload.chatSettings.model === "gemini-pro-vision") {
+  // For Vision models, apply special handling
+  if(payload.chatSettings.model.includes("vision")) {
     geminiMessages = adaptMessagesForGeminiVision(geminiMessages)
   }
+  
   return geminiMessages
 }
 
