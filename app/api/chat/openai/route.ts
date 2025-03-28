@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     const response = await openai.chat.completions.create({
       model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
       messages: filteredMessages as ChatCompletionCreateParamsBase["messages"],
-      temperature: isO1Model ? 1 : chatSettings.temperature,
+      temperature: isO1Model || isO3Model ? 1 : chatSettings.temperature,
       ...(isO1Model || isO3Model
         ? {
             max_completion_tokens: isO1Model ? 32768 : 4096 // 32768 for o1 models, 4096 for o3 models
