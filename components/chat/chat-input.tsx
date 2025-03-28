@@ -6,7 +6,7 @@ import {
   IconBolt,
   IconCirclePlus,
   IconPlayerStopFilled,
-  IconSend
+  IconArrowUp
 } from "@tabler/icons-react"
 import Image from "next/image"
 import { FC, useContext, useEffect, useRef, useState } from "react"
@@ -151,7 +151,7 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
       if (item.type.indexOf("image") === 0) {
         if (!imagesAllowed) {
           toast.error(
-            `Images are not supported for this model. Use models like GPT-4o or Gemini 1.5 Pro instead.`
+            `Images are not supported for this model. Use models like GPT-4o or Gemini 2 Flash instead.`
           )
           return
         }
@@ -264,7 +264,7 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
               size={30}
             />
           ) : (
-            <IconSend
+            <IconArrowUp
               className={cn(
                 "bg-primary text-secondary rounded p-1",
                 !userInput && "cursor-not-allowed opacity-50"
