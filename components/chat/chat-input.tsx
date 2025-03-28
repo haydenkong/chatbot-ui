@@ -264,7 +264,7 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
               size={30}
             />
           ) : (
-            <IconArrowUp
+            <IconArrowUp stroke={2}
               className={cn(
                 "bg-primary text-secondary rounded p-1",
                 !userInput && "cursor-not-allowed opacity-50"
