@@ -32,6 +32,7 @@ export async function POST(request: Request) {
 
     // Before the OpenAI call
     const isO1Model = chatSettings.model === "o1-preview" || chatSettings.model === "o1-mini";
+    const isO3Model = chatSettings.model === "o3-mini";
     const filteredMessages = isO1Model 
       ? messages.filter(msg => msg.role !== 'system')
       : messages;
@@ -40,9 +41,9 @@ export async function POST(request: Request) {
       model: chatSettings.model as ChatCompletionCreateParamsBase["model"],
       messages: filteredMessages as ChatCompletionCreateParamsBase["messages"],
       temperature: isO1Model ? 1 : chatSettings.temperature,
-      ...(isO1Model 
+      ...(isO1Model || isO3Model
         ? {
-            max_completion_tokens: 32768 // For o1 models
+            max_completion_tokens: isO1Model ? 32768 : 4096 // 32768 for o1 models, 4096 for o3 models
           }
         : {
             max_tokens: chatSettings.model === "gpt-4o-mini" 
