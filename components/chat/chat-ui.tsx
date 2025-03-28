@@ -19,7 +19,6 @@ import { ChatMessages } from "./chat-messages"
 import { ChatScrollButtons } from "./chat-scroll-buttons"
 import { ChatSecondaryButtons } from "./chat-secondary-buttons"
 import { ModelSelector } from "./model-selector"
-import { ChatSettings } from "./chat-settings"
 
 interface ChatUIProps {}
 
@@ -201,7 +200,6 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
 
       <div className="absolute right-4 top-1 flex h-[40px] items-center space-x-2">
         <ModelSelector />
-        <ChatSettings />
         <ChatSecondaryButtons />
       </div>
 

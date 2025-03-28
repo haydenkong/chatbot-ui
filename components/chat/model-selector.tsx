@@ -118,14 +118,7 @@ export const ModelSelector: FC<ModelSelectorProps> = ({}) => {
                   </div>
                 </>
               ) : (
-                <div className="flex items-center">
-                  <ModelIcon
-                    provider="openai"
-                    width={26}
-                    height={26}
-                  />
-                  <div className="ml-2">Select a model</div>
-                </div>
+                <div className="flex items-center">Select a model</div>
               )}
             </div>
 
