@@ -84,6 +84,9 @@ export const ChatSettings: FC<ChatSettingsProps> = ({}) => {
         className="bg-background border-input relative flex max-h-[calc(100vh-60px)] w-[300px] flex-col space-y-4 overflow-auto rounded-lg border-2 p-6 sm:w-[350px] md:w-[400px] lg:w-[500px] dark:border-none"
         align="end"
       >
+        <div className="mb-4 font-medium">
+          Current model: {fullModel?.modelName || chatSettings.model}
+        </div>
         <ChatSettingsForm
           chatSettings={chatSettings}
           onChangeChatSettings={setChatSettings}

@@ -91,7 +91,7 @@ export const ModelSelector: FC<ModelSelectorProps> = ({}) => {
       }}
     >
       <DropdownMenuTrigger
-        className="bg-background flex items-center space-x-2 border-2 px-3 py-2"
+        className="bg-background flex items-center space-x-2 border-2 px-3 py-2 rounded-md"
         asChild
         disabled={allModels.length === 0}
       >
@@ -102,10 +102,11 @@ export const ModelSelector: FC<ModelSelectorProps> = ({}) => {
         ) : (
           <Button
             ref={triggerRef}
-            className="flex items-center justify-between"
-            variant="ghost"
+            className="flex items-center justify-between min-w-[180px]"
+            variant="outline"
           >
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
+              <div className="text-sm font-medium">Model:</div>
               {selectedModel ? (
                 <>
                   <ModelIcon
@@ -113,7 +114,7 @@ export const ModelSelector: FC<ModelSelectorProps> = ({}) => {
                     width={26}
                     height={26}
                   />
-                  <div className="ml-2 flex items-center">
+                  <div className="flex items-center">
                     {selectedModel?.modelName}
                   </div>
                 </>
