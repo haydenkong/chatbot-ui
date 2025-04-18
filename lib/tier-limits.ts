@@ -6,6 +6,9 @@ export const TIER_LIMITS: Record<TierName, {
   messages_per_day: number
 }> = {
     FREE: {
+      "gpt-4.1-2025-04-14": 0,
+      "gpt-4.1-mini-2025-04-14": 0,
+      "gpt-4.1-nano-2025-04-14": 0,
       "gpt-4.5-preview": 0,
       "o3-mini": 0,
       "o1-mini": 0,
@@ -60,6 +63,9 @@ export const TIER_LIMITS: Record<TierName, {
       messages_per_day: 20
     },
     EXPLORE: {
+      "gpt-4.1-2025-04-14": 5,
+      "gpt-4.1-mini-2025-04-14": 5,
+      "gpt-4.1-nano-2025-04-14": 20,
       "gpt-4.5-preview": 0,
       "o3-mini": 0,
       "o1-mini": 0,
@@ -112,9 +118,12 @@ export const TIER_LIMITS: Record<TierName, {
       "sonar-small-online": 3,
       "sonar-medium-chat": 3,
       "sonar-medium-online": 3,
-      messages_per_day: 50
+      messages_per_day: 30
     },
     PLUS: {
+      "gpt-4.1-2025-04-14": 10,
+      "gpt-4.1-mini-2025-04-14": 15,
+      "gpt-4.1-nano-2025-04-14": 30,
       "gpt-4.5-preview": 5,
       "o3-mini": 30,
       "o1-mini": 8,
@@ -166,9 +175,12 @@ export const TIER_LIMITS: Record<TierName, {
       "sonar-small-online": 5,
       "sonar-medium-chat": 5,
       "sonar-medium-online": 5,
-      messages_per_day: 50
+      messages_per_day: 40
     },
     MAX: {
+      "gpt-4.1-2025-04-14": 20,
+      "gpt-4.1-mini-2025-04-14": 50,
+      "gpt-4.1-nano-2025-04-14": 50,
       "gpt-4.5-preview": 15,
       "o3-mini": 50,
       "o1-mini": 15,

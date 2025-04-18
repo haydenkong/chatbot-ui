@@ -53,6 +53,38 @@ const o1preview: LLM = {
 
 // OpenAI Models (UPDATED 1/25/24) -----------------------------
 
+
+const GPT4_1: LLM = {
+  modelId: "gpt-4.1-2025-04-14",
+  modelName: "GPT-4.1",
+  provider: "openai",
+  hostedId: "gpt-4.1-2025-04-14",
+  platformLink: OPENAI_PLATORM_LINK,
+  imageInput: true,
+  badge: ["NEW", "PLUS"]
+}
+
+const GPT4_1_mini: LLM = {
+  modelId: "gpt-4.1-mini-2025-04-14",
+  modelName: "GPT-4.1 Mini",
+  provider: "openai",
+  hostedId: "gpt-4.1-mini-2025-04-14",
+  platformLink: OPENAI_PLATORM_LINK,
+  imageInput: true,
+  badge: ["NEW"]
+}
+
+const GPT4_1_nano: LLM = {
+  modelId: "gpt-4.1-nano-2025-04-14",
+  modelName: "GPT-4.1 Nano",
+  provider: "openai",
+  hostedId: "gpt-4.1-nano-2025-04-14",
+  platformLink: OPENAI_PLATORM_LINK,
+  imageInput: true,
+  badge: ["NEW"]
+}
+
+
 const GPT4oMini: LLM = {
   modelId: "gpt-4o-mini",
   modelName: "GPT-4o Mini",
@@ -113,6 +145,9 @@ const GPT3_5Turbo: LLM = {
 }
 
 export const OPENAI_LLM_LIST: LLM[] = [
+  GPT4_1,
+  GPT4_1_mini,
+  GPT4_1_nano,
   GPT4_5,
   o3Mini,
   o1Mini,
