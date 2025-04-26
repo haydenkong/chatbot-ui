@@ -1,4 +1,5 @@
 import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler"
+import { WaitingAnimation } from "./waiting-animation"
 import { ChatbotUIContext } from "@/context/context"
 import { LLM_LIST } from "@/lib/models/llm/llm-list"
 import { cn } from "@/lib/utils"
@@ -273,9 +274,7 @@ export const Message: FC<MessageProps> = ({
               {(() => {
                 switch (toolInUse) {
                   case "none":
-                    return (
-                      <IconCircleFilled className="animate-pulse" size={20} />
-                    )
+                    return <WaitingAnimation />
                   case "retrieval":
                     return (
                       <div className="flex animate-pulse items-center space-x-2">
