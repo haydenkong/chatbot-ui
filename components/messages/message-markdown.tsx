@@ -6,22 +6,31 @@ import { MessageMarkdownMemoized } from "./message-markdown-memoized"
 import { cn } from "@/lib/utils"
 
 interface MessageMarkdownProps {
-  content: string
+  content: string;
+  role?: "user" | "assistant" | "system"; // Add role prop
 }
 
-export const MessageMarkdown: FC<MessageMarkdownProps> = ({ content }) => {
-  const [visible, setVisible] = useState(false)
+export const MessageMarkdown: FC<MessageMarkdownProps> = ({ content, role }) => {
+  const [visible, setVisible] = useState(false);
+  
+  // Only apply fade-in animation for assistant messages
+  const shouldAnimate = role === "assistant";
 
   useEffect(() => {
-    // Set a short timeout before starting the fade-in animation
-    const timer = setTimeout(() => setVisible(true), 50)
-    return () => clearTimeout(timer)
-  }, [])
+    if (shouldAnimate) {
+      // Set a short timeout before starting the fade-in animation
+      const timer = setTimeout(() => setVisible(true), 50);
+      return () => clearTimeout(timer);
+    } else {
+      // For non-assistant messages, always show immediately
+      setVisible(true);
+    }
+  }, [shouldAnimate]);
 
   return (
     <div 
       className={cn(
-        "transition-opacity duration-700 ease-in", 
+        shouldAnimate ? "transition-opacity duration-700 ease-in" : "", 
         visible ? "opacity-100" : "opacity-0"
       )}
     >
