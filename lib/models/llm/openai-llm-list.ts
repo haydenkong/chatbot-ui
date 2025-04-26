@@ -2,18 +2,6 @@ import { LLM } from "@/types"
 
 const OPENAI_PLATORM_LINK = "https://platform.openai.com/docs/overview"
 
-// OpenAI GPT 4.5 Models
-const GPT4_5: LLM = {
-  modelId: "gpt-4.5-preview",
-  modelName: "GPT 4.5",
-  provider: "openai",
-  hostedId: "gpt-4.5-preview",
-  platformLink: OPENAI_PLATORM_LINK,
-  imageInput: false,
-  badge: ["NEW", "PLUS", "BETA"]
-}
-
-
 
 // OpenAI o3 Models
 const o3Mini: LLM = {
@@ -37,7 +25,7 @@ const o1Mini: LLM = {
   hostedId: "o1-mini",
   platformLink: OPENAI_PLATORM_LINK,
   imageInput: false,
-  badge: ["NEW", "PLUS"]
+  badge: ["PLUS"]
 }
 
 const o1preview: LLM = {
@@ -47,7 +35,7 @@ const o1preview: LLM = {
   hostedId: "o1-preview",
   platformLink: OPENAI_PLATORM_LINK,
   imageInput: false,
-  badge: ["NEW", "PLUS"]
+  badge: ["PLUS"]
 }
 
 
@@ -148,7 +136,6 @@ export const OPENAI_LLM_LIST: LLM[] = [
   GPT4_1,
   GPT4_1_mini,
   GPT4_1_nano,
-  GPT4_5,
   o3Mini,
   o1Mini,
   o1preview,
