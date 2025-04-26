@@ -23,7 +23,6 @@ const o3Mini: LLM = {
   hostedId: "o3-mini",
   platformLink: OPENAI_PLATORM_LINK,
   imageInput: false,
-  badge: ["NEW", "PLUS"]
 }
 
 // OpenAI o1 Models
