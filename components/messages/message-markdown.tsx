@@ -7,8 +7,7 @@ import { cn } from "@/lib/utils"
 
 interface MessageMarkdownProps {
   content: string;
-  role?: "user" | "assistant" | "system"; // Add role prop
-}
+  role?: string; // String
 
 export const MessageMarkdown: FC<MessageMarkdownProps> = ({ content, role }) => {
   const [visible, setVisible] = useState(false);
