@@ -64,9 +64,14 @@ module.exports = {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 }
-        }
+        },
+        fadeIn: {
+          '0%': { opacity: '0.3' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
+        'fade-in': 'fadeIn 0.3s ease-out forwards',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out'
       }

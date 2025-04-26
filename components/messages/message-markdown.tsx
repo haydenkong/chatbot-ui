@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils"
 interface MessageMarkdownProps {
   content: string;
   role?: string;
-  isGenerating?: boolean; // New prop to check if message is currently being generated
-  isLastMessage?: boolean; // New prop to check if this is the last message in the conversation
+  isGenerating?: boolean;
+  isLastMessage?: boolean;
 }
 
 export const MessageMarkdown: FC<MessageMarkdownProps> = ({ 
@@ -18,29 +18,17 @@ export const MessageMarkdown: FC<MessageMarkdownProps> = ({
   isGenerating = false,
   isLastMessage = false 
 }) => {
-  const [visible, setVisible] = useState(false);
-  
   // Only animate when this is an assistant message that's currently being generated
   const shouldAnimate = role === "assistant" && isGenerating && isLastMessage;
-
-  useEffect(() => {
-    if (shouldAnimate) {
-      // For messages being generated, start with opacity 0
-      setVisible(false);
-      // Set a short timeout before starting the fade-in animation
-      const timer = setTimeout(() => setVisible(true), 50);
-      return () => clearTimeout(timer);
-    } else {
-      // For existing messages or non-assistant messages, show immediately
-      setVisible(true);
-    }
-  }, [shouldAnimate, content]); // Re-trigger effect when content changes (for streaming)
-
+  
+  // Use CSS animations instead of React state for smoother transitions
   return (
     <div 
       className={cn(
-        shouldAnimate ? "transition-opacity duration-700 ease-in" : "", 
-        visible ? "opacity-100" : "opacity-0"
+        // Always make content immediately visible for normal messages
+        !shouldAnimate ? "opacity-100" : "",
+        // For generating messages, apply animation that makes text appear smoothly as it's typed
+        shouldAnimate ? "animate-fade-in" : ""
       )}
     >
       <MessageMarkdownMemoized

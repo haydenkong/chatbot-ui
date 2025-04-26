@@ -1,4 +1,3 @@
-// components/messages/waiting-animation.tsx
 import { FC, useEffect, useState } from "react"
 import { IconCircleFilled } from "@tabler/icons-react"
 import { cn } from "@/lib/utils"
@@ -31,7 +30,7 @@ export const WaitingAnimation: FC = () => {
       clearInterval(fadeOutTimer)
       clearInterval(changeMessageTimer)
     }
-  }, [thinkingMessages.length])
+  }, [])
 
   return (
     <div className="flex items-center space-x-2">
