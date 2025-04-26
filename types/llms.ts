@@ -10,6 +10,7 @@ export type LLMID =
 
 // OpenAI Models (UPDATED 5/13/24)
 export type OpenAILLMID =
+  | "o4-mini-2025-04-16" // o4 Mini
   | "gpt-4.1-2025-04-14" // GPT-4.1
   | "gpt-4.1-mini-2025-04-14" // GPT-4.1 Mini
   | "gpt-4.1-nano-2025-04-14" // GPT-4.1 Nano

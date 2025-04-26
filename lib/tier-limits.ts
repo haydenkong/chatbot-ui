@@ -6,6 +6,7 @@ export const TIER_LIMITS: Record<TierName, {
   messages_per_day: number
 }> = {
     FREE: {
+      "o4-mini-2025-04-16": 0,
       "gpt-4.1-2025-04-14": 0,
       "gpt-4.1-mini-2025-04-14": 0,
       "gpt-4.1-nano-2025-04-14": 0,
@@ -62,6 +63,7 @@ export const TIER_LIMITS: Record<TierName, {
       messages_per_day: 20
     },
     EXPLORE: {
+      "o4-mini-2025-04-16": 5,
       "gpt-4.1-2025-04-14": 5,
       "gpt-4.1-mini-2025-04-14": 5,
       "gpt-4.1-nano-2025-04-14": 20,
@@ -119,6 +121,7 @@ export const TIER_LIMITS: Record<TierName, {
       messages_per_day: 30
     },
     PLUS: {
+      "o4-mini-2025-04-16": 10,
       "gpt-4.1-2025-04-14": 10,
       "gpt-4.1-mini-2025-04-14": 15,
       "gpt-4.1-nano-2025-04-14": 30,
@@ -175,6 +178,7 @@ export const TIER_LIMITS: Record<TierName, {
       messages_per_day: 40
     },
     MAX: {
+      "o4-mini-2025-04-16": 30,
       "gpt-4.1-2025-04-14": 20,
       "gpt-4.1-mini-2025-04-14": 50,
       "gpt-4.1-nano-2025-04-14": 50,
