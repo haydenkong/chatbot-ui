@@ -7,25 +7,34 @@ import { cn } from "@/lib/utils"
 
 interface MessageMarkdownProps {
   content: string;
-  role?: string; // String
+  role?: string;
+  isGenerating?: boolean; // New prop to check if message is currently being generated
+  isLastMessage?: boolean; // New prop to check if this is the last message in the conversation
 }
 
-export const MessageMarkdown: FC<MessageMarkdownProps> = ({ content, role }) => {
+export const MessageMarkdown: FC<MessageMarkdownProps> = ({ 
+  content, 
+  role, 
+  isGenerating = false,
+  isLastMessage = false 
+}) => {
   const [visible, setVisible] = useState(false);
   
-  // Only apply fade-in animation for assistant messages
-  const shouldAnimate = role === "assistant";
+  // Only animate when this is an assistant message that's currently being generated
+  const shouldAnimate = role === "assistant" && isGenerating && isLastMessage;
 
   useEffect(() => {
     if (shouldAnimate) {
+      // For messages being generated, start with opacity 0
+      setVisible(false);
       // Set a short timeout before starting the fade-in animation
       const timer = setTimeout(() => setVisible(true), 50);
       return () => clearTimeout(timer);
     } else {
-      // For non-assistant messages, always show immediately
+      // For existing messages or non-assistant messages, show immediately
       setVisible(true);
     }
-  }, [shouldAnimate]);
+  }, [shouldAnimate, content]); // Re-trigger effect when content changes (for streaming)
 
   return (
     <div 
