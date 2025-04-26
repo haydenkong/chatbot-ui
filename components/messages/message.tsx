@@ -303,7 +303,12 @@ export const Message: FC<MessageProps> = ({
               maxRows={20}
             />
           ) : (
-            <MessageMarkdown content={message.content} role={message.role} />
+            <MessageMarkdown 
+              content={message.content} 
+              role={message.role} 
+              isGenerating={isGenerating}
+              isLastMessage={isLast}
+            />
           )}
         </div>
 
