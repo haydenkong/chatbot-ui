@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, ReactNode } from "react"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import { MessageCodeBlock } from "./message-codeblock"
@@ -12,6 +12,14 @@ interface MessageMarkdownProps {
   isLastMessage?: boolean;
 }
 
+// Add proper type for component props
+interface ComponentProps {
+  children: ReactNode;
+  node?: any;
+  className?: string;
+  [key: string]: any; // For any other props
+}
+
 export const MessageMarkdown: FC<MessageMarkdownProps> = ({ 
   content, 
   role, 
@@ -23,7 +31,7 @@ export const MessageMarkdown: FC<MessageMarkdownProps> = ({
 
   // Custom component for code blocks in the Markdown
   const components = {
-    p({ children }) {
+    p({ children }: ComponentProps) {
       return (
         <p className="mb-2 last:mb-0">
           {shouldAnimate ? (
@@ -34,10 +42,10 @@ export const MessageMarkdown: FC<MessageMarkdownProps> = ({
         </p>
       );
     },
-    img({ node, ...props }) {
+    img({ node, ...props }: ComponentProps) {
       return <img className="max-w-[67%]" {...props} />;
     },
-    code({ node, className, children, ...props }) {
+    code({ node, className, children, ...props }: ComponentProps) {
       const childArray = React.Children.toArray(children);
       const firstChild = childArray[0] as React.ReactElement;
       const firstChildAsString = React.isValidElement(firstChild)
