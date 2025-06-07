@@ -102,3 +102,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* KaTeX styles for dark mode */
+.dark .katex {
+  color: #f8f9fa;
+}
+
+/* Ensure KaTeX formulas are properly sized and centered */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5em 0;
+  margin: 1em 0;
+}
+
+/* Fix for inline math */
+.katex-inline {
+  display: inline-block;
+  vertical-align: middle;
+}
