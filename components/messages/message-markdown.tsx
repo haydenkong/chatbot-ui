@@ -23,6 +23,14 @@ export const MessageMarkdown: FC<MessageMarkdownProps> = ({
   // Only animate when this is an assistant message that's currently being generated
   const shouldAnimate = role === "assistant" && isGenerating && isLastMessage;
   
+  // Process content to ensure LaTeX renders properly
+  // This ensures all LaTeX delimiters are properly handled
+  const processedContent = content
+    // Replace display math with KaTeX-compatible format
+    .replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '$$\n$1\n$$')
+    // Replace inline math with KaTeX-compatible format
+    .replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$');
+  
   // Use CSS animations instead of React state for smoother transitions
   return (
     <div 
@@ -83,7 +91,7 @@ export const MessageMarkdown: FC<MessageMarkdownProps> = ({
           }
         }}
       >
-        {content}
+        {processedContent}
       </MessageMarkdownMemoized>
     </div>
   )
