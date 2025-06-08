@@ -16,6 +16,9 @@ export const Brand: FC<BrandProps> = ({
 }) => {
   const { profile } = useContext(ChatbotUIContext)
   
+  // If showPersonalGreeting is false, don't render anything
+  if (!showPersonalGreeting) return null;
+  
   const displayName = profile?.display_name || ""
   const greeting = showPersonalGreeting && displayName ? `Hello, ${displayName}` : "PixelVerseAI Chats"
 

@@ -76,7 +76,7 @@ export const ChatSuggestions = () => {
   const greeting = displayName ? `How can I help you, ${displayName}?` : "How can I help you today?"
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-start w-full max-w-3xl">
       <h1 className="mb-8 text-4xl font-bold">{greeting}</h1>
       
       <div className="mb-8 flex space-x-2">
@@ -93,7 +93,7 @@ export const ChatSuggestions = () => {
         ))}
       </div>
 
-      <div className="grid w-full max-w-3xl gap-3">
+      <div className="grid w-full gap-3">
         {categories
           .find(category => category.id === activeCategory)
           ?.questions.map((question, index) => (
