@@ -8,16 +8,18 @@ import { ChatbotUISVG } from "../icons/chatbotui-svg"
 interface BrandProps {
   theme?: "dark" | "light"
   showPersonalGreeting?: boolean
+  hideOnChatPage?: boolean
 }
 
 export const Brand: FC<BrandProps> = ({ 
   theme = "dark", 
-  showPersonalGreeting = false 
+  showPersonalGreeting = false,
+  hideOnChatPage = false
 }) => {
-  const { profile } = useContext(ChatbotUIContext)
+  const { profile, chatMessages } = useContext(ChatbotUIContext)
   
-  // If showPersonalGreeting is false, don't render anything
-  if (!showPersonalGreeting) return null;
+  // If we're on the chat page with no messages and hideOnChatPage is true, don't render
+  if (hideOnChatPage && chatMessages.length === 0) return null;
   
   const displayName = profile?.display_name || ""
   const greeting = showPersonalGreeting && displayName ? `Hello, ${displayName}` : "PixelVerseAI Chats"
