@@ -1,6 +1,6 @@
 import { ChatbotUIContext } from "@/context/context"
 import { cn } from "@/lib/utils"
-import { IconCode, IconGraduationCap, IconPencil, IconSparkles } from "@tabler/icons-react"
+import { IconCode, IconSchool, IconPencil, IconSparkles } from "@tabler/icons-react"
 import { useContext, useState } from "react"
 import { Button } from "../ui/button"
 
@@ -52,7 +52,7 @@ export const ChatSuggestions = () => {
     {
       id: "learn",
       name: "Learn",
-      icon: <IconGraduationCap size={20} />,
+      icon: <IconSchool size={20} />,
       questions: [
         "Explain quantum computing in simple terms",
         "What are the key principles of effective leadership?",
