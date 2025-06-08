@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { IconCode, IconSchool, IconPencil, IconSparkles } from "@tabler/icons-react"
 import { useContext, useState } from "react"
 import { Button } from "../ui/button"
+import { useChatHandler } from "./chat-hooks/use-chat-handler"
 
 interface SuggestionCategory {
   id: string
@@ -12,7 +13,8 @@ interface SuggestionCategory {
 }
 
 export const ChatSuggestions = () => {
-  const { profile, setUserInput, handleSendMessage, chatMessages } = useContext(ChatbotUIContext)
+  const { profile, setUserInput, chatMessages } = useContext(ChatbotUIContext)
+  const { handleSendMessage } = useChatHandler()
   const [activeCategory, setActiveCategory] = useState<string>("create")
 
   const categories: SuggestionCategory[] = [
